@@ -10,7 +10,8 @@ package student.management;
  * @author Huy Cuong
  */
 public class User {
-
+    public String message;
+    public String status;
     public String _id;
     public String username;
     public String fullname;

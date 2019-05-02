@@ -15,7 +15,8 @@ public class StudentManagement {
         data.put("password", "cuong123");
        //String res = HttpRequest.post("http://localhost:3000/api").form(data).body();
         //System.out.println("Response was: " + res);
-         new login().setVisible(true);
+         CONST.loginForm = new login();
+         CONST.loginForm.setVisible(true);
 //        Gson gson = new Gson();
 //        //User[] a = gson.fromJson(HttpRequest.get("http://localhost:3000/api/i/it").body(), User[].class);
 //        User loginAPIResponse =gson.fromJson(HttpRequest.post("http://localhost:3000/api").form(data).body(), User.class);

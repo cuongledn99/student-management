@@ -12,4 +12,8 @@ package student.management;
 public class CONST {
     public static String loginAPI="http://localhost:3000/api";
     public static String getAllUserAPI="http://localhost:3000/api/i/it";
+    public static String addNewUserAPI="http://localhost:3000/api/i/it";
+    public static String deleteUserAPI="http://localhost:3000/api/i/it";
+    public static String choosingUsername ;
+    public static login loginForm ;
 }
