@@ -10,10 +10,11 @@ package student.management;
  * @author Huy Cuong
  */
 public class CONST {
-    public static String loginAPI="http://localhost:3000/api";
-    public static String getAllUserAPI="http://localhost:3000/api/i/it";
-    public static String addNewUserAPI="http://localhost:3000/api/i/it";
-    public static String deleteUserAPI="http://localhost:3000/api/i/it";
+    public static String serverIP ="http://localhost:3000/";
+    public static String loginAPI=CONST.serverIP+"api";
+    public static String getAllUserAPI=CONST.serverIP+"api/i/it";
+    public static String addNewUserAPI=CONST.serverIP+"api/i/it";
+    public static String deleteUserAPI=CONST.serverIP+"api/i/it";
     public static String choosingUsername ;
     public static login loginForm ;
 }

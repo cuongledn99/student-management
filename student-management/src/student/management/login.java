@@ -29,7 +29,7 @@ public class login extends javax.swing.JFrame {
         txtbox_username = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btn_cancel = new javax.swing.JButton();
+        btn_exit = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         btn_login = new javax.swing.JButton();
         txtbox_password = new javax.swing.JPasswordField();
@@ -40,7 +40,12 @@ public class login extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
-        btn_cancel.setText("Cancel");
+        btn_exit.setText("Thoát");
+        btn_exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_exitActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Phần mềm quản lý sinh viên");
 
@@ -61,7 +66,7 @@ public class login extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btn_login)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_cancel))
+                        .addComponent(btn_exit))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
@@ -91,7 +96,7 @@ public class login extends javax.swing.JFrame {
                     .addComponent(txtbox_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_cancel)
+                    .addComponent(btn_exit)
                     .addComponent(btn_login))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
@@ -125,9 +130,13 @@ public class login extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btn_loginActionPerformed
 
+    private void btn_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btn_exitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_cancel;
+    private javax.swing.JButton btn_exit;
     private javax.swing.JButton btn_login;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

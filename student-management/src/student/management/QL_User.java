@@ -17,8 +17,8 @@ public class QL_User extends javax.swing.JFrame {
     /**
      * Creates new form QL_User
      */
-    public QL_User() {
-        initComponents();
+    void myCustomInit(){
+       tableUsers.setDefaultEditor(Object.class, null);
         ListSelectionModel cellSelectionModel = tableUsers.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -29,7 +29,11 @@ public class QL_User extends javax.swing.JFrame {
             String selectedUsername = (String) tableUsers.getValueAt(selectedRow[0], 1);
             CONST.choosingUsername=selectedUsername;
 
-        });
+        }); 
+    }
+    public QL_User() {
+        initComponents();
+        myCustomInit();
     }
 
     /**
