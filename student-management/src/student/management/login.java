@@ -2,6 +2,8 @@ package student.management;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,9 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         initComponents();
+        //Toolkit kit =Toolkit.getDefaultToolkit();
+        
+        //this.setIconImage(kit.getImage("C:\\Users\\Huy Cuong\\Desktop\\binh-thanh-management-backend\\src\\app\\public\\img\\a.png"));
     }
 
     /**
