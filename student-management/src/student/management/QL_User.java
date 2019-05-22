@@ -1,8 +1,11 @@
 package student.management;
 
 import com.google.gson.Gson;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -17,8 +20,8 @@ public class QL_User extends javax.swing.JFrame {
     /**
      * Creates new form QL_User
      */
-    void myCustomInit(){
-       tableUsers.setDefaultEditor(Object.class, null);
+    void myCustomInit() {
+        tableUsers.setDefaultEditor(Object.class, null);
         ListSelectionModel cellSelectionModel = tableUsers.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -26,11 +29,12 @@ public class QL_User extends javax.swing.JFrame {
 
             int[] selectedRow = tableUsers.getSelectedRows();
             //String a =(String)tableUsers.getValueAt(1, 1);
-            String selectedUsername = (String) tableUsers.getValueAt(selectedRow[0], 1);
-            CONST.choosingUsername=selectedUsername;
+            String selectedUsername = (String) tableUsers.getValueAt(selectedRow[0], 0);
+            CONST.choosingUsername = selectedUsername;
 
-        }); 
+        });
     }
+
     public QL_User() {
         initComponents();
         myCustomInit();
@@ -72,7 +76,7 @@ public class QL_User extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "username", "Chức Vụ", "Hành Động"
+                "username", "Chức Vụ", "Hành Động"
             }
         ));
         jScrollPane1.setViewportView(tableUsers);
@@ -80,6 +84,11 @@ public class QL_User extends javax.swing.JFrame {
         jLabel3.setText("Phần mềm quản lý sinh viên");
 
         btn_detail.setText("Xem chi tiết");
+        btn_detail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_detailActionPerformed(evt);
+            }
+        });
 
         btn_Delete.setText("Xóa");
         btn_Delete.addActionListener(new java.awt.event.ActionListener() {
@@ -147,8 +156,15 @@ public class QL_User extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     void clearTable() {
-        DefaultTableModel model = (DefaultTableModel) tableUsers.getModel();
-        model.setRowCount(0);
+        try {
+            DefaultTableModel dtm = (DefaultTableModel) tableUsers.getModel();
+            dtm.setRowCount(0);
+
+        } catch (Exception e) {
+            System.out.println("errror clear table");
+            System.out.println(e);
+        }
+
     }
 
     //form open event
@@ -162,42 +178,76 @@ public class QL_User extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_createAccountActionPerformed
 
     private void btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DeleteActionPerformed
-        
+
         try {
-            Gson gson = new Gson();
-        User deleteAPIResponse = gson.fromJson(HttpRequest.delete(CONST.deleteUserAPI+"/"+CONST.choosingUsername).body(), User.class);
-        switch(deleteAPIResponse.status){
-            case "ok":
-                JOptionPane.showMessageDialog(null, "Xóa thành công !");
-                break;
-            case "error":
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng thử lại sau !");
-                break;
-        }
-            loadAllUserToTable();
+            DBConnection connection = new DBConnection();
+            connection.connect();
+            PreparedStatement query = DBConnection.con.prepareStatement("delete from users where username=?");
+
+            query.setString(1, CONST.choosingUsername);
+            System.out.println("query: " + query);
+            query.execute();
+            connection.disconnect();
+            JOptionPane.showMessageDialog(null, "Xóa thành công !");
         } catch (Exception e) {
             System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Lỗi xảy ra, vui lòng thử lại sau !");
         }
-        
+
+
     }//GEN-LAST:event_btn_DeleteActionPerformed
 
     private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
         CONST.loginForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_logoutActionPerformed
+
+    private void btn_detailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_detailActionPerformed
+        try {
+            DBConnection connection = new DBConnection();
+            connection.connect();
+            PreparedStatement query = DBConnection.con.prepareStatement("select userid,username,fullname,userrole,address,email,phonenumber from users where username=?");
+            query.setString(1, CONST.choosingUsername);
+            ResultSet result =query.executeQuery();
+            if(result.next()){
+                System.out.println("detail: ");
+                System.out.println("username: "+result.getString(2));
+                System.out.println("fullname: "+result.getString(3));
+            }
+            connection.disconnect();
+        } catch (Exception e) {
+            System.out.println("view user's detail error");
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_btn_detailActionPerformed
     void loadAllUserToTable() {
         clearTable();
-        Gson gson = new Gson();
-        allUsers = gson.fromJson(HttpRequest.get(CONST.getAllUserAPI).body(), User[].class);
-        for (int i = 0; i < allUsers.length; i++) {
-            DefaultTableModel model = (DefaultTableModel) tableUsers.getModel();
-            model.addRow(new Object[]{
-                i + 1,
-                allUsers[i].username,
-                allUsers[i].roles
 
-            });
+        DBConnection connection = new DBConnection();
+        connection.connect();
+        ResultSet result = connection.query("select username,userrole from users");
+        try {
+            while (result.next()) {
+                DefaultTableModel model = (DefaultTableModel) tableUsers.getModel();
+                model.addRow(new Object[]{
+                    result.getString(1),
+                    result.getString(2)
+                });
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
+        connection.disconnect();
+//        for (int i = 0; i < allUsers.length; i++) {
+//            DefaultTableModel model = (DefaultTableModel) tableUsers.getModel();
+//            model.addRow(new Object[]{
+//                i + 1,
+//                allUsers[i].username,
+//                allUsers[i].roles
+//
+//            });
+//        }
     }
     /**
      * @param args the command line arguments

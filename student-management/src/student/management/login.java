@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class login extends javax.swing.JFrame {
     public login() {
         initComponents();
         //Toolkit kit =Toolkit.getDefaultToolkit();
-        
+
         //this.setIconImage(kit.getImage("C:\\Users\\Huy Cuong\\Desktop\\binh-thanh-management-backend\\src\\app\\public\\img\\a.png"));
     }
 
@@ -108,31 +109,39 @@ public class login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         String username = txtbox_username.getText();
         String password = txtbox_password.getText();
-
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("username", username);
-        data.put("password", password);
-        Gson gson = new Gson();
-        User loginAPIResponse = gson.fromJson(HttpRequest.post(CONST.loginAPI).form(data).body(), User.class);
+        String role =null;
+        DBConnection con = new DBConnection();
+        con.connect();
+        ResultSet result = con.query("select fullname,userrole from users where username= '"+username+"' and password= '"+password+"'");
         try {
-            switch (loginAPIResponse.roles) {
-            case "it":
-                new QL_User().setVisible(true);
-                this.setVisible(false);
-                break;
-            case "student":
-                break;
-                default:
-                    JOptionPane.showMessageDialog(null,"Có lỗi xảy ra, kiểm tra kết nối internet của bạn và thử lại" );
-        }
+            while (result.next()) {
+                 role =result.getString(2);
+                
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Sai tên đăng nhập hoặc mật khẩu" );
+             System.out.println(e);
         }
-        
+        con.disconnect();
+
+        try {
+            switch (role) {
+                case "IT":
+                    new QL_User().setVisible(true);
+                    this.setVisible(false);
+                    break;
+                case "student":
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, kiểm tra kết nối internet của bạn và thử lại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu");
+        }
+
     }//GEN-LAST:event_btn_loginActionPerformed
 
     private void btn_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exitActionPerformed

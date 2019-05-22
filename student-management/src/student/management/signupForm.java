@@ -6,8 +6,11 @@
 package student.management;
 
 import com.google.gson.Gson;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -227,6 +230,22 @@ public class signupForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    boolean checkUserName(String username) {
+        DBConnection connection = new DBConnection();
+        connection.connect();
+        String query = "select * from users where username='" + username + "'";
+        ResultSet result = connection.query(query);
+        try {
+            if (result.next()) {
+                connection.disconnect();
+                return false;
+            }
+        } catch (Exception e) {
+        }
+
+        connection.disconnect();
+        return true;
+    }
     private void btn_createUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createUserActionPerformed
         String username = txtbox_username.getText();
         String password = txtbox_password.getText();
@@ -236,33 +255,61 @@ public class signupForm extends javax.swing.JFrame {
         String dob = txtbox_dob.getText();
         String phone = txtbox_phone.getText();
         String address = txtbox_address.getText();
+        DBConnection connection = new DBConnection();
+        if (checkUserName(username)) {
+            connection.connect();
+            try {
+                PreparedStatement query = DBConnection.con.prepareStatement("insert into users values(?,?,?,?,?,?,?,?)");
 
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("username", username);
-        data.put("password", password);
-        data.put("roles", role);
-        data.put("email", email);
-        data.put("dateofbirth", dob);
-        data.put("fullname", fullname);
-        data.put("email", email);
-        data.put("phone", phone);
-        data.put("address", address);
-        Gson gson = new Gson();
-        User addUserAPIResponse = gson.fromJson(HttpRequest.post(CONST.addNewUserAPI).form(data).body(), User.class);
-        try {
-            switch (addUserAPIResponse.message) {
-                case "username already exits":
-                    JOptionPane.showMessageDialog(null, "username đã tồn tại !");
-                    break;
-                case "success":
-                    JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công");
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, kiểm tra kết nối internet của bạn và thử lại");
+                query.setString(1, UUID.randomUUID().toString());
+                query.setString(2, username);
+                query.setString(3, password);
+                query.setString(4, fullname);
+                query.setString(5, role);
+                query.setString(6, address);
+                query.setString(7, email);
+                query.setString(8, phone);
+                System.out.println(query);
+                query.execute();
+                JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công");
+
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, vui lòng thử lại sau !");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu");
+
+            connection.disconnect();
         }
+        else{
+            JOptionPane.showMessageDialog(null, "username đã tồn tại !");
+        }
+
+//        Map<String, String> data = new HashMap<String, String>();
+//        data.put("username", username);
+//        data.put("password", password);
+//        data.put("roles", role);
+//        data.put("email", email);
+//        data.put("dateofbirth", dob);
+//        data.put("fullname", fullname);
+//        data.put("email", email);
+//        data.put("phone", phone);
+//        data.put("address", address);
+//        Gson gson = new Gson();
+//        User addUserAPIResponse = gson.fromJson(HttpRequest.post(CONST.addNewUserAPI).form(data).body(), User.class);
+//        try {
+//            switch (addUserAPIResponse.message) {
+//                case "username already exits":
+//                    JOptionPane.showMessageDialog(null, "username đã tồn tại !");
+//                    break;
+//                case "success":
+//                    JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công");
+//                    break;
+//                default:
+//                    JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, kiểm tra kết nối internet của bạn và thử lại");
+//            }
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu");
+//        }
     }//GEN-LAST:event_btn_createUserActionPerformed
 
     private void btn_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_closeActionPerformed
