@@ -6,13 +6,19 @@
 package student.management;
 
 import com.google.gson.Gson;
+import java.awt.TextField;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import oracle.jdbc.Const;
 
 /**
  *
@@ -54,18 +60,28 @@ public class signupForm extends javax.swing.JFrame {
         btn_close = new javax.swing.JButton();
         txtbox_fullname = new java.awt.TextField();
         txtbox_username = new java.awt.TextField();
-        txtbox_role = new java.awt.TextField();
         txtbox_password = new javax.swing.JPasswordField();
+        label9 = new java.awt.Label();
+        txtbox_id = new java.awt.TextField();
+        label10 = new java.awt.Label();
+        combobox_role = new javax.swing.JComboBox<>();
+        combobox_gender = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        label1.setText("Họ tên");
+        jPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                loadRoleToComboBox(evt);
+            }
+        });
+
+        label1.setText("id");
 
         label2.setText("username");
 
         label3.setText("password");
 
-        label4.setText("Quyền");
+        label4.setText("giới tính");
 
         label5.setText("email");
 
@@ -101,11 +117,23 @@ public class signupForm extends javax.swing.JFrame {
             }
         });
 
-        txtbox_role.addActionListener(new java.awt.event.ActionListener() {
+        label9.setText("Quyền");
+
+        txtbox_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtbox_roleActionPerformed(evt);
+                txtbox_idActionPerformed(evt);
             }
         });
+
+        label10.setText("Họ tên");
+
+        combobox_role.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                combobox_roleComponentShown(evt);
+            }
+        });
+
+        combobox_gender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -127,41 +155,56 @@ public class signupForm extends javax.swing.JFrame {
                         .addGap(25, 25, 25))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addGap(29, 29, 29)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtbox_id, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtbox_username, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(combobox_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtbox_password, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(135, 135, 135)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(135, 135, 135)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(label8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(37, 37, 37)
+                                        .addComponent(combobox_role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(12, 12, 12)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtbox_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtbox_email, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
                                     .addComponent(txtbox_dob, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtbox_phone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtbox_address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtbox_password, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addGap(29, 29, 29)
-                                        .addComponent(txtbox_username, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(19, 19, 19)
-                                        .addComponent(txtbox_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txtbox_address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(33, 126, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(102, 102, 102)
-                    .addComponent(txtbox_role, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(453, Short.MAX_VALUE)))
+                    .addGap(20, 20, 20)
+                    .addComponent(label9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(573, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtbox_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtbox_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -180,29 +223,37 @@ public class signupForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtbox_phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtbox_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtbox_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(combobox_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(combobox_role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 129, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtbox_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_createUser)
                             .addComponent(btn_close))
-                        .addGap(49, 49, 49))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtbox_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(68, 68, 68))))
+                        .addGap(49, 49, 49))))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                     .addContainerGap(266, Short.MAX_VALUE)
-                    .addComponent(txtbox_role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(130, 130, 130)))
         );
 
@@ -219,7 +270,7 @@ public class signupForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 423, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -230,47 +281,94 @@ public class signupForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * check if username already exist
+     *
+     * @param username
+     * @return true (username was not exits) false (username already exist)
+     */
     boolean checkUserName(String username) {
+
         DBConnection connection = new DBConnection();
         connection.connect();
+
         String query = "select * from users where username='" + username + "'";
+
         ResultSet result = connection.query(query);
+
         try {
+
             if (result.next()) {
                 connection.disconnect();
                 return false;
             }
+
         } catch (Exception e) {
         }
 
         connection.disconnect();
         return true;
     }
+
+    boolean isValidID(String id) {
+
+        DBConnection connection = new DBConnection();
+        connection.connect();
+
+        String query = "select * from users where userid='" + id + "'";
+
+        ResultSet result = connection.query(query);
+
+        try {
+
+            if (result.next()) {
+                connection.disconnect();
+                return false;
+            }
+
+        } catch (Exception e) {
+        }
+
+        connection.disconnect();
+        return true;
+    }
+
     private void btn_createUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createUserActionPerformed
+
         String username = txtbox_username.getText();
         String password = txtbox_password.getText();
-        String role = txtbox_role.getText();
+        String role = CONST.roles.get(combobox_role.getSelectedIndex());
         String fullname = txtbox_fullname.getText();
         String email = txtbox_email.getText();
         String dob = txtbox_dob.getText();
         String phone = txtbox_phone.getText();
         String address = txtbox_address.getText();
+        String gender = combobox_gender.getItemAt(combobox_gender.getSelectedIndex());
+        String userid = txtbox_id.getText();
+        
         DBConnection connection = new DBConnection();
-        if (checkUserName(username)) {
-            connection.connect();
-            try {
-                PreparedStatement query = DBConnection.con.prepareStatement("insert into users values(?,?,?,?,?,?,?,?)");
+        
+        if (checkUserName(username) && isValidID(userid)) {
 
-                query.setString(1, UUID.randomUUID().toString());
-                query.setString(2, username);
-                query.setString(3, password);
-                query.setString(4, fullname);
-                query.setString(5, role);
-                query.setString(6, address);
-                query.setString(7, email);
-                query.setString(8, phone);
-                System.out.println(query);
-                query.execute();
+            try {
+
+                connection.connect();
+
+                String sql = "{call addUser(?,?,?,?,?,?,?,?,?,?)}";
+                CallableStatement statement = DBConnection.con.prepareCall(sql);
+                statement.setString(1, userid);
+                statement.setString(2, username);
+                statement.setString(3, password);
+                statement.setString(4, fullname);
+                statement.setString(5, gender);
+                statement.setString(6, role);
+                statement.setString(7, phone);
+                statement.setString(8, dob);
+                statement.setString(9, email);
+                statement.setString(10, address);
+                
+                statement.execute();
+
                 JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công");
 
             } catch (Exception e) {
@@ -279,9 +377,8 @@ public class signupForm extends javax.swing.JFrame {
             }
 
             connection.disconnect();
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "username đã tồn tại !");
+        } else {
+            JOptionPane.showMessageDialog(null, "username hoặc id đã tồn tại !");
         }
 
 //        Map<String, String> data = new HashMap<String, String>();
@@ -324,16 +421,57 @@ public class signupForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtbox_usernameActionPerformed
 
-    private void txtbox_roleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbox_roleActionPerformed
+    private void txtbox_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbox_idActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtbox_roleActionPerformed
+    }//GEN-LAST:event_txtbox_idActionPerformed
 
+    private void combobox_roleComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_combobox_roleComponentShown
+        System.out.println("showw");
+    }//GEN-LAST:event_combobox_roleComponentShown
 
+    private void loadRoleToComboBox(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_loadRoleToComboBox
+
+        DBConnection connection = new DBConnection();
+
+        try {
+
+            connection.connect();
+            ResultSet result = connection.query("select * from role");
+            while (result.next()) {
+                CONST.roles.add(result.getString("rolename"));
+                CONST.rolesID.add(result.getString("roleid"));
+                combobox_role.addItem(result.getString("rolename"));
+            }
+            connection.disconnect();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_loadRoleToComboBox
+
+    @Override
+    public void pack() {
+        super.pack(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void disableAllInput() {
+        this.txtbox_address.setEnabled(false);
+        this.txtbox_dob.setEnabled(false);
+        this.txtbox_email.setEnabled(false);
+        this.txtbox_fullname.setEnabled(false);
+        //this.txtbox_gender.setEnabled(false);
+        this.txtbox_id.setEnabled(false);
+        this.txtbox_password.setEnabled(false);
+        this.txtbox_phone.setEnabled(false);
+        this.combobox_role.setEnabled(false);
+        this.txtbox_username.setEnabled(false);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_close;
     private javax.swing.JButton btn_createUser;
+    private javax.swing.JComboBox<String> combobox_gender;
+    private javax.swing.JComboBox<String> combobox_role;
     private javax.swing.JPanel jPanel1;
     private java.awt.Label label1;
+    private java.awt.Label label10;
     private java.awt.Label label2;
     private java.awt.Label label3;
     private java.awt.Label label4;
@@ -341,13 +479,53 @@ public class signupForm extends javax.swing.JFrame {
     private java.awt.Label label6;
     private java.awt.Label label7;
     private java.awt.Label label8;
+    private java.awt.Label label9;
     private java.awt.TextField txtbox_address;
     private java.awt.TextField txtbox_dob;
     private java.awt.TextField txtbox_email;
     private java.awt.TextField txtbox_fullname;
+    private java.awt.TextField txtbox_id;
     private javax.swing.JPasswordField txtbox_password;
     private java.awt.TextField txtbox_phone;
-    private java.awt.TextField txtbox_role;
     private java.awt.TextField txtbox_username;
     // End of variables declaration//GEN-END:variables
+
+    public void setTxtbox_address(String txtbox_address) {
+        this.txtbox_address.setText(txtbox_address);
+
+    }
+
+    public void setTxtbox_dob(String txtbox_dob) {
+        this.txtbox_dob.setText(txtbox_dob);
+    }
+
+    public void setTxtbox_email(String txtbox_email) {
+        this.txtbox_email.setText(txtbox_email);
+    }
+
+    public void setTxtbox_fullname(String txtbox_fullname) {
+        this.txtbox_fullname.setText(txtbox_fullname);
+    }
+
+    
+
+    public void setTxtbox_phone(String txtbox_phone) {
+        this.txtbox_phone.setText(txtbox_phone);
+    }
+
+    public void setTxtbox_role(String txtbox_role) {
+        //this.txtbox_role.setText(txtbox_role);
+    }
+
+    public void setTxtbox_username(String txtbox_username) {
+        this.txtbox_username.setText(txtbox_username);
+    }
+
+    public void setTxtbox_password(String txtbox_password) {
+        this.txtbox_password.setText(txtbox_password);
+    }
+
+    public void setTxtbox_id(String id) {
+        this.txtbox_id.setText(id);
+    }
 }

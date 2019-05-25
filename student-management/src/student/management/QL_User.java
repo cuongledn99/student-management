@@ -3,6 +3,7 @@ package student.management;
 import com.google.gson.Gson;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -180,15 +181,18 @@ public class QL_User extends javax.swing.JFrame {
     private void btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DeleteActionPerformed
 
         try {
+
             DBConnection connection = new DBConnection();
             connection.connect();
-            PreparedStatement query = DBConnection.con.prepareStatement("delete from users where username=?");
 
+            PreparedStatement query = DBConnection.con.prepareStatement("delete from users where username=?");
             query.setString(1, CONST.choosingUsername);
-            System.out.println("query: " + query);
+
             query.execute();
+
             connection.disconnect();
             JOptionPane.showMessageDialog(null, "Xóa thành công !");
+
         } catch (Exception e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "Lỗi xảy ra, vui lòng thử lại sau !");
@@ -204,17 +208,36 @@ public class QL_User extends javax.swing.JFrame {
 
     private void btn_detailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_detailActionPerformed
         try {
+
             DBConnection connection = new DBConnection();
             connection.connect();
-            PreparedStatement query = DBConnection.con.prepareStatement("select userid,username,fullname,userrole,address,email,phonenumber from users where username=?");
+
+            PreparedStatement query = DBConnection.con.prepareStatement("select gender,dateofbirth, userid,username,fullname,userrole,address,email,phonenumber from users where username=?");
             query.setString(1, CONST.choosingUsername);
-            ResultSet result =query.executeQuery();
-            if(result.next()){
-                System.out.println("detail: ");
-                System.out.println("username: "+result.getString(2));
-                System.out.println("fullname: "+result.getString(3));
+
+            ResultSet result = query.executeQuery();
+
+            if (result.next()) {
+
+                signupForm userDetail = new signupForm();
+                userDetail.setTxtbox_address(result.getString("address"));
+                userDetail.setTxtbox_id(result.getString("userid"));
+                userDetail.setTxtbox_dob(result.getString(2));
+                userDetail.setTxtbox_email(result.getString("email"));
+                userDetail.setTxtbox_fullname(result.getString("fullname"));
+                //userDetail.setTxtbox_gender(result.getString("gender"));
+                userDetail.setTxtbox_phone(result.getString("phonenumber"));
+                userDetail.setTxtbox_role(result.getString("userrole"));
+                userDetail.setTxtbox_username(result.getString("username"));
+                userDetail.setTxtbox_password("****");
+                userDetail.disableAllInput();
+
+                userDetail.setVisible(true);
+
             }
+
             connection.disconnect();
+            
         } catch (Exception e) {
             System.out.println("view user's detail error");
             System.out.println(e);
@@ -225,9 +248,11 @@ public class QL_User extends javax.swing.JFrame {
         clearTable();
 
         DBConnection connection = new DBConnection();
-        connection.connect();
-        ResultSet result = connection.query("select username,userrole from users");
+
         try {
+            connection.connect();
+            PreparedStatement query = DBConnection.con.prepareStatement("select username,rolename from users,role where users.userrole=role.roleid");
+            ResultSet result = query.executeQuery();
             while (result.next()) {
                 DefaultTableModel model = (DefaultTableModel) tableUsers.getModel();
                 model.addRow(new Object[]{

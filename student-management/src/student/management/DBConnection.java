@@ -5,37 +5,67 @@
  */
 package student.management;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Huy Cuong
  */
+class OraConnection {
+
+    public static Connection openConnection(
+            String db_host_name,
+            String db_port,
+            String db_service_name,
+            String db_username,
+            String db_password
+    ) throws SQLException {
+        String connection_string = String.format(
+                "%s:%s:%s:@%s:%s/%s",
+                "jdbc",
+                "oracle",
+                "thin",
+                db_host_name,
+                db_port,
+                db_service_name
+        );
+
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(OraConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return DriverManager.getConnection(
+                connection_string,
+                db_username,
+                db_password
+        );
+    }
+}
+
 public class DBConnection {
 
-    public static  Connection con;
-    private String username;
-    private String password;
-    private String hostname;
-    private String port;
-    private String DBName;
-    public DBConnection(){
-        hostname="localhost";
-        username="root";
-        password="";
-        port="3306";
-        DBName="test";
-    }
+    String db_host_name;
+    String db_port;
+    String db_service_name;
+    String db_username;
+    String db_password;
+    public static Connection con;
+
     public void connect() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String connectionString = "jdbc:mysql://" + hostname + ":" + port + "/" + DBName;
-            System.out.println(connectionString);
-            con = DriverManager.getConnection(connectionString, username, password);
-
+            con = OraConnection.openConnection(CONST.hostname, CONST.port, CONST.dbname, CONST.username, CONST.password);
         } catch (Exception e) {
             System.out.println(e);
         }
+
     }
 
     public void disconnect() {
@@ -48,16 +78,20 @@ public class DBConnection {
     }
 
     public ResultSet query(String query) {
+
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            return rs;
+
+            PreparedStatement sql = DBConnection.con.prepareStatement(query);
+            ResultSet result = sql.executeQuery();
+            return result;
+
         } catch (Exception e) {
-            System.out.println("error in query function");
-             System.out.println(e);
-            return null;
+            System.out.println(e);
         }
 
-        
+        return null;
     }
+
+    
+
 }
