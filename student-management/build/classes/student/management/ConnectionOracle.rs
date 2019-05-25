@@ -1,0 +1,2 @@
+quanlysinhvien.ConnectionOracle
+student.ConnectionOracle
