@@ -61,6 +61,11 @@ public class phongdaotao extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableSubject);
 
         btn_addSubject.setText("Thêm môn học");
+        btn_addSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_addSubjectActionPerformed(evt);
+            }
+        });
 
         btn_deleteSubject.setText("Xóa môn");
 
@@ -210,6 +215,10 @@ public class phongdaotao extends javax.swing.JFrame {
         System.out.println("in there");
         new addFacultyForm().setVisible(true);
     }//GEN-LAST:event_btnAddFacultyActionPerformed
+
+    private void btn_addSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addSubjectActionPerformed
+        
+    }//GEN-LAST:event_btn_addSubjectActionPerformed
 
     /**
      * @param args the command line arguments

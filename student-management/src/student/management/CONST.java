@@ -21,4 +21,5 @@ public class CONST {
     public static login loginForm ;
     public static ArrayList<String> roles =new ArrayList<>();
     public static ArrayList<String> rolesID =new ArrayList<>();
+    public static String currentUserid =null;
 }

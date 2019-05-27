@@ -122,14 +122,16 @@ public class login extends javax.swing.JFrame {
 //        try {
 //
 //            con.connect();
-//            ResultSet result = con.query("select fullname,userrole from users where username= '" + username + "' and userPassword= '" + password + "'");
+//            ResultSet result = con.query("select ,userid,fullname,userrole from users where username= '" + username + "' and userPassword= '" + password + "'");
 //
 //            while (result.next()) {
 //                role = result.getString("userrole");
+       // CONST.currentUserid = result.getString("userid");
 //            }
 //
 //            con.disconnect();
 //            System.out.println(role);
+
 //        } catch (Exception e) {
 //            System.out.println(e);
 //        }
