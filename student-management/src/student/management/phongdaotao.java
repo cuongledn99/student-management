@@ -212,7 +212,6 @@ public class phongdaotao extends javax.swing.JFrame {
     }//GEN-LAST:event_loadSubjectToTable
 
     private void btnAddFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFacultyActionPerformed
-        System.out.println("in there");
         new addFacultyForm().setVisible(true);
     }//GEN-LAST:event_btnAddFacultyActionPerformed
 

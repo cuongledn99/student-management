@@ -1,6 +1,7 @@
 package student.management;
 
 import com.google.gson.Gson;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -185,15 +186,18 @@ public class QL_User extends javax.swing.JFrame {
             DBConnection connection = new DBConnection();
             connection.connect();
 
-            PreparedStatement query = DBConnection.con.prepareStatement("delete from users where username=?");
-            query.setString(1, CONST.choosingUsername);
+            String sqlStringDelete ="{call deleteUser(?)}";
+            CallableStatement deleteStatement =DBConnection.con.prepareCall(sqlStringDelete);
+            
+            deleteStatement.setString(1, CONST.choosingUsername);
 
-            query.execute();
+            deleteStatement.execute();
 
             connection.disconnect();
             JOptionPane.showMessageDialog(null, "Xóa thành công !");
 
         } catch (Exception e) {
+            System.out.println("delete account err");
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "Lỗi xảy ra, vui lòng thử lại sau !");
         }

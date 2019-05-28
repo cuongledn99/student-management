@@ -5,6 +5,7 @@
  */
 package student.management;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 
@@ -107,17 +108,19 @@ public class addFacultyForm extends javax.swing.JFrame {
         try {
             connection.connect();
             
-            PreparedStatement query = DBConnection.con.prepareStatement("insert into faculty values(?,?,?,?)");
-            query.setString(1, facultyid);
-            query.setString(2, facultyname);
-            query.setString(3, facultyDean);
-            query.setString(4, "2/2/2000");
+            String sqlsStringAddFaculty ="{call addFaculty(?,?,?)}";
+            CallableStatement addFacultyStatement =DBConnection.con.prepareCall(sqlsStringAddFaculty);
+            
+            addFacultyStatement.setString(1, facultyid);
+            addFacultyStatement.setString(2, facultyname);
+            addFacultyStatement.setString(3, facultyDean);
 
-            query.execute();
+            addFacultyStatement.execute();
 
             connection.disconnect();
             JOptionPane.showMessageDialog(null, "Thêm thành công !");
         } catch (Exception e) {
+            System.out.println("add faculty err");
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, vui lòng thử lại sau !");
         }

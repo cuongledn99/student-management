@@ -756,7 +756,104 @@ BEGIN
     END LOOP;
 END;
 
+create table role
+(
+  roleid varchar2(10) primary key,
+  rolename varchar2(20)
+)
+insert into role values('it','it_department');
+insert into role values('st','student');
+insert into role values('ctsv','ctsv');
+insert into role values('khtc','khtc');
+insert into role values('pdt','phongdaotao');
+insert into role values('lec','lecture');
+select*from users
+update users set userrole='st' where userid='st01'
+update users set userrole='lec' where userid='lec01'
+
+commit;
 
 
+create or REPLACE procedure addUser(userid users.userid%type, 
+username users.username%type,
+pass users.userpassword%type,
+fullname users.fullname%type,
+gender users.gender%type,
+role_in role.rolename%type, --role name
+phone users.phonenumber%type,
+dob users.dateofbirth%type,
+email users.email%type,
+address users.address%type
 
+)
+as
+  roleid_temp role.roleid%type;
+BEGIN
+  --insert table users
+  select roleid into roleid_temp from role where rolename=role_in;
+  insert into users values(userid,username,pass,fullname,gender,roleid_temp,phone,dob,email,address);
+  
+  --insert in relevant tables
+  if(role_in='it_department') then
+    insert into it_department values(userid);
+  elsif (role_in='student') then
+    insert into student values(userid,null);
+  elsif (role_in='ctsv') then
+    insert into ctsv values(userid);
+  elsif (role_in='khtc') then
+    insert into khtc values(userid);
+  elsif (role_in='phongdaotao') then
+    insert into phongdaotao values(userid);
+  elsif (role_in='lecture') then
+    insert into lecture values(userid,null,null);
+  end if;
+end;
+
+create or replace procedure deleteUser(username_in users.username%type)
+as
+  roleid_temp users.userrole%type;
+  rolename_temp role.rolename%type;
+  userid_temp users.userid%type;
+begin
+  --delete in relevant table first
+  select userrole,userid into roleid_temp,userid_temp from users where username=username_in;
+  select rolename into rolename_temp from role where roleid=roleid_temp;
+  
+  if(rolename_temp='it_department') then
+    delete from it_department where itdep_id= userid_temp;
+    
+  elsif (rolename_temp='student') then
+    delete from student where studentid= userid_temp; 
+    
+  elsif (rolename_temp='ctsv') then
+    delete from ctsv where id_ctsv= userid_temp; 
+    
+  elsif (rolename_temp='khtc') then
+    delete from khtc where khtc_id= userid_temp; 
+    
+  elsif (rolename_temp='phongdaotao') then
+    delete from phongdaotao where pdt_id= userid_temp; 
+    
+  elsif (rolename_temp='lecture') then
+    delete from lecture where lectureid= userid_temp; 
+    
+  end if;
+  
+  --delete in table users
+  delete from users where username=username_in;
+end;
+
+
+create or replace procedure addFaculty(
+facultyid_in faculty.facultyid%type,
+facultyname_in faculty.facultyname%type,
+deanid_in faculty.dean%type
+)
+as
+  currentdate date;
+begin
+  SELECT sysdate into currentdate FROM dual;
+  
+  insert into faculty values(facultyid_in,facultyname_in,deanid_in,currentdate);
+end;
 
