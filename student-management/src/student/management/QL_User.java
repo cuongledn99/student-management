@@ -1,8 +1,9 @@
 package student.management;
 
-import com.google.gson.Gson;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -193,7 +194,7 @@ public class QL_User extends javax.swing.JFrame {
             connection.disconnect();
             JOptionPane.showMessageDialog(null, "Xóa thành công !");
 
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "Lỗi xảy ra, vui lòng thử lại sau !");
         }

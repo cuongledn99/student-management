@@ -292,51 +292,47 @@ public class DangKyHP extends javax.swing.JFrame {
         // TODO add your handling code here:
         lblErrorNotification.setText("");
         lblSuccessNotification.setText("");
-        try {
-            Connection conn = ConnectionOracle.getConnection();
-            String ma_offering,semester,PDT_id;
-            String errorNotification ="";
-            String successNotification = "";
-            String userID = new ConnectionOracle().getUserID();
-            CallableStatement callProc;
-            for(int i = 0; i < tbBangDangKyHP.getRowCount() ; i++){
-                Boolean status_Checkbox = (Boolean) tbBangDangKyHP.getModel().getValueAt(i, 5);
-                if(status_Checkbox){
-                    ma_offering = (String) tbBangDangKyHP.getModel().getValueAt(i, 0);
-                    semester = (String) tbBangDangKyHP.getModel().getValueAt(i, 3);
-                    PDT_id = null;
-                    System.out.println(ma_offering);
-                    System.out.println(userID);
-                    System.out.println(semester);
-                    System.out.println(PDT_id);
-                     try {
-                         String stringSQL = "{call INSERT_SUBJECT_REGISTRATION(?,?,?,?)}";
-                         callProc = conn.prepareCall(stringSQL);
-                         callProc.setString(1, userID);
-                         callProc.setString(2, PDT_id);
-                         callProc.setString(3, ma_offering);
-                         callProc.setString(4, semester);
-                         callProc.executeQuery();
-                         successNotification += ma_offering + "<br>";
-                     } catch (SQLException e) {
-                         System.out.println("loi SQL" + e);
-                         System.out.println(e.getErrorCode());
-                         if(e.getErrorCode() == 20001){
-                             errorNotification += ma_offering+": Môn này đã được đăng ký. <br>";
-                         }else if(e.getErrorCode() == 20000){
-                             errorNotification += ma_offering+": Không thỏa điều kiện tiên quyết. <br>";
-                         }
-                     }
+        connection.connect();
+        String ma_offering,semester,PDT_id;
+        String errorNotification ="";
+        String successNotification = "";
+        String userID = new ConnectionOracle().getUserID();
+        CallableStatement callProc;
+        for(int i = 0; i < tbBangDangKyHP.getRowCount() ; i++){
+            Boolean status_Checkbox = (Boolean) tbBangDangKyHP.getModel().getValueAt(i, 5);
+            if(status_Checkbox){
+                ma_offering = (String) tbBangDangKyHP.getModel().getValueAt(i, 0);
+                semester = (String) tbBangDangKyHP.getModel().getValueAt(i, 3);
+                PDT_id = null;
+                System.out.println(ma_offering);
+                System.out.println(userID);
+                System.out.println(semester);
+                System.out.println(PDT_id);
+                try {
+                    String stringSQL = "{call INSERT_SUBJECT_REGISTRATION(?,?,?,?)}";
+                    callProc = DBConnection.con.prepareCall(stringSQL);
+                    callProc.setString(1, userID);
+                    callProc.setString(2, PDT_id);
+                    callProc.setString(3, ma_offering);
+                    callProc.setString(4, semester);
+                    callProc.executeQuery();
+                    successNotification += ma_offering + "<br>";
+                } catch (SQLException e) {
+                    System.out.println("loi SQL" + e);
+                    System.out.println(e.getErrorCode());
+                    if(e.getErrorCode() == 20001){
+                        errorNotification += ma_offering+": Môn này đã được đăng ký. <br>";
+                    }else if(e.getErrorCode() == 20000){
+                        errorNotification += ma_offering+": Không thỏa điều kiện tiên quyết. <br>";
+                    }
                 }
             }
-            if(!errorNotification.equals(""))
-               lblErrorNotification.setText("<html><p style=\"padding:6 8; font-size:11\">Danh sách lớp đăng ký không thành công:<br>" + errorNotification + "</p></html>");
-            if(!successNotification.equals(""))
-               lblSuccessNotification.setText("<html><p style=\"padding:6 8; font-size:11\">Danh sách lớp đã đăng ký thành công:<br>" + successNotification + "</p></html>");
-            conn.close();
-        } catch (SQLException e) {
-                    System.out.println(e);
-                }
+        }
+        if(!errorNotification.equals(""))
+            lblErrorNotification.setText("<html><p style=\"padding:6 8; font-size:11\">Danh sách lớp đăng ký không thành công:<br>" + errorNotification + "</p></html>");
+        if(!successNotification.equals(""))
+            lblSuccessNotification.setText("<html><p style=\"padding:6 8; font-size:11\">Danh sách lớp đã đăng ký thành công:<br>" + successNotification + "</p></html>");
+        connection.disconnect();
         this.prepareUI_panelThongTin();
         this.prepareUI_panelDangKyHP();
 //        Boolean a = (Boolean) jTable2.getModel().getValueAt(0, 5);
@@ -348,44 +344,40 @@ public class DangKyHP extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDangKyActionPerformed
 
     private void btnDeleteOfferingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteOfferingActionPerformed
-        try {
-            Connection conn = ConnectionOracle.getConnection();
-            String offeringID, semester;
-            String userID = new ConnectionOracle().getUserID();
-            PreparedStatement ps;
-            for(int i = 0; i < tbOfferingRegistered.getRowCount() ; i++){
-                Boolean status_Checkbox = (Boolean) tbOfferingRegistered.getModel().getValueAt(i, 5);
-                if(status_Checkbox){
-                     try {
-                         offeringID = (String) tbOfferingRegistered.getModel().getValueAt(i, 0);
-                         semester = (String) tbOfferingRegistered.getModel().getValueAt(i, 3);
-                         System.out.println(userID);
-                         System.out.println(offeringID);
-                         System.out.println(semester);
-                         String stringSQL = "DELETE FROM SUBJECT_REGISTRATION sr WHERE sr.REGISTEREDBY = ? AND sr.OFFERINGID = ? AND sr.SEMESTER = ?";
-                         ps = conn.prepareCall(stringSQL);
-                         ps.setString(1, userID);
-                         ps.setString(2, offeringID);
-                         ps.setString(3, semester);
-                         ps.executeQuery();
-                     } catch (SQLException e) {
-                         System.out.println("loi SQL" + e);
-                     }
+        connection.connect();
+        String offeringID, semester;
+        String userID = new ConnectionOracle().getUserID();
+        PreparedStatement ps;
+        for(int i = 0; i < tbOfferingRegistered.getRowCount() ; i++){
+            Boolean status_Checkbox = (Boolean) tbOfferingRegistered.getModel().getValueAt(i, 5);
+            if(status_Checkbox){
+                try {
+                    offeringID = (String) tbOfferingRegistered.getModel().getValueAt(i, 0);
+                    semester = (String) tbOfferingRegistered.getModel().getValueAt(i, 3);
+                    System.out.println(userID);
+                    System.out.println(offeringID);
+                    System.out.println(semester);
+                    String stringSQL = "DELETE FROM SUBJECT_REGISTRATION sr WHERE sr.REGISTEREDBY = ? AND sr.OFFERINGID = ? AND sr.SEMESTER = ?";
+                    ps = DBConnection.con.prepareCall(stringSQL);
+                    ps.setString(1, userID);
+                    ps.setString(2, offeringID);
+                    ps.setString(3, semester);
+                    ps.executeQuery();
+                } catch (SQLException e) {
+                    System.out.println("loi SQL" + e);
                 }
             }
-            conn.close();
-        } catch (SQLException e) {
-                    System.out.println(e);
-           }
+        }
+        connection.disconnect();
         this.prepareUI_panelThongTin();
     }//GEN-LAST:event_btnDeleteOfferingActionPerformed
     public void prepareUI_panelDangKyHP() {
         model_tbBangDangKyHP = (DefaultTableModel) tbBangDangKyHP.getModel();
         model_tbBangDangKyHP.setRowCount(0);
         try {
-            Connection conn = ConnectionOracle.getConnection();
+            connection.connect();
             String stringSQL = "Select * from Offering";
-            Statement stmt = conn.createStatement();
+            Statement stmt = DBConnection.con.createStatement();
             ResultSet rs = stmt.executeQuery(stringSQL);
             while(rs.next()){
                 String offeringID = rs.getString(1);
@@ -396,7 +388,7 @@ public class DangKyHP extends javax.swing.JFrame {
                 Boolean status = false;
                 model_tbBangDangKyHP.addRow(new Object[]{offeringID,subjectID,lectureID,semester,slot,status});
             }
-            conn.close();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println(e);
         }   
@@ -406,9 +398,9 @@ public class DangKyHP extends javax.swing.JFrame {
         model_tbOfferingRegistered.setRowCount(0);
         String userID = new ConnectionOracle().getUserID();
         try {
-            Connection conn = ConnectionOracle.getConnection();
+            connection.connect();
             String stringSQL = "SELECT o.OfferingID,o.semester,SubjectID,LectureID,Slot FROM SUBJECT_REGISTRATION sr, Offering o WHERE o.OFFERINGID = sr.OFFERINGID AND sr.REGISTEREDBY = ?";
-            PreparedStatement ps = conn.prepareStatement(stringSQL);
+            PreparedStatement ps = DBConnection.con.prepareStatement(stringSQL);
             //System.out.println(userID);
             ps.setString(1, userID);
             ResultSet rs = ps.executeQuery();
@@ -422,7 +414,7 @@ public class DangKyHP extends javax.swing.JFrame {
                 Boolean status = false;
                 model_tbOfferingRegistered.addRow(new Object[]{offeringID,subjectID,lectureID,semester,slot,status});
             }
-            conn.close();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -492,4 +484,5 @@ public class DangKyHP extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private DefaultTableModel model_tbBangDangKyHP;
     private DefaultTableModel model_tbOfferingRegistered;
+    private DBConnection connection = new DBConnection();
 }

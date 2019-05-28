@@ -5,7 +5,6 @@
  */
 package student.management;
 
-import com.google.gson.Gson;
 import java.awt.TextField;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

@@ -13,10 +13,10 @@ import java.util.ArrayList;
  */
 public class CONST {
     public static String hostname ="localhost";
-    public static String port ="1522";
-    public static String dbname ="orcl2";
-    public static String username ="system";
-    public static String password ="123";
+    public static String port ="1521"; //port Quoc Cuong :1521
+    public static String dbname ="orcl"; //dbname = orcl
+    public static String username ="DOAN";
+    public static String password ="123456";
     public static String choosingUsername ;
     public static login loginForm ;
     public static ArrayList<String> roles =new ArrayList<>();

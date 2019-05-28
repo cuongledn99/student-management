@@ -4,7 +4,11 @@
  * and open the template in the editor.
  */
 package student.management;
-
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import javax.swing.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OracleConnection;
 /**
  *
  * @author crazy
@@ -30,8 +34,27 @@ public class BangDiem extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblStudentID = new javax.swing.JLabel();
+        lblDoB = new javax.swing.JLabel();
+        lbl_cbSemester = new javax.swing.JLabel();
+        lblGender = new javax.swing.JLabel();
+        lblClass = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbScore = new javax.swing.JTable();
+        cbSemester = new javax.swing.JComboBox<>();
+        lblFaculty = new javax.swing.JLabel();
+        DatePickerSettings dateSettings = new DatePickerSettings();
+        dateSettings.setFormatForDatesCommonEra("dd MM yyyy");
+        dateSettings.setFormatForDatesBeforeCommonEra("dd MM uuuu");
+        dateSettings.setInitialDateToToday();
+        datePicker2 = new com.github.lgooddatepicker.components.DatePicker(dateSettings);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 600));
@@ -65,40 +88,241 @@ public class BangDiem extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(250, 250, 250));
 
-        jLabel2.setText("jLabel2");
+        lblName.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblName.setText("Họ và Tên:");
 
-        jLabel3.setText("jLabel3");
+        lblStudentID.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblStudentID.setText("Mã Số Sinh Viên:");
+
+        lblDoB.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblDoB.setText("Ngày sinh:");
+
+        lbl_cbSemester.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lbl_cbSemester.setText("Bảng Điểm:");
+
+        lblGender.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblGender.setText("Giới Tính");
+
+        lblClass.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblClass.setText("Lớp");
+
+        jTextField1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTextField1.setText("Dương Quốc Cường");
+        jTextField1.setEditable(false);
+
+        jTextField2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTextField2.setText("jTextField2");
+        jTextField2.setEditable(false);
+
+        jTextField3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTextField3.setText("jTextField2");
+        jTextField3.setEditable(false);
+
+        jTextField4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTextField4.setText("jTextField2");
+        jTextField4.setEditable(false);
+
+        jTextField5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTextField5.setText("jTextField2");
+        jTextField5.setEditable(false);
+
+        jTextField6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTextField6.setText("jTextField2");
+        jTextField6.setEditable(false);
+
+        tbScore.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        tbScore.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "", "Mã HP", "Tên học phần", "Tín chỉ", "Điểm QT", "Điểm GK	", "Điểm TH	", "Điểm CK	", "Điểm HP	"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbScore.setRowHeight(30);
+        jScrollPane1.setViewportView(tbScore);
+        if (tbScore.getColumnModel().getColumnCount() > 0) {
+            tbScore.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tbScore.getColumnModel().getColumn(1).setPreferredWidth(40);
+            tbScore.getColumnModel().getColumn(2).setPreferredWidth(200);
+            tbScore.getColumnModel().getColumn(3).setPreferredWidth(40);
+            tbScore.getColumnModel().getColumn(4).setPreferredWidth(40);
+            tbScore.getColumnModel().getColumn(5).setPreferredWidth(40);
+            tbScore.getColumnModel().getColumn(6).setPreferredWidth(40);
+            tbScore.getColumnModel().getColumn(7).setPreferredWidth(40);
+            tbScore.getColumnModel().getColumn(8).setPreferredWidth(40);
+        }
+
+        cbSemester.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "item1" }));
+        cbSemester.setToolTipText("");
+        cbSemester.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbSemesterItemStateChanged(evt);
+            }
+        });
+
+        lblFaculty.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblFaculty.setText("Khoa:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(657, Short.MAX_VALUE))
+                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblStudentID, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                    .addComponent(lbl_cbSemester, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblFaculty, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cbSemester, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                    .addComponent(jTextField2)
+                    .addComponent(jTextField3))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblClass, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblDoB, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(290, 290, 290))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(223, 223, 223)
+                        .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDoB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblClass, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFaculty, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_cbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 90, 780, 390);
+        jPanel2.setBounds(0, 90, 780, 600);
 
-        setBounds(0, 0, 794, 519);
+        setBounds(0, 0, 794, 724);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbSemesterItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSemesterItemStateChanged
+        // TODO add your handling code here:
+        String semester = (String) cbSemester.getSelectedItem();
+        this.prepareGUI_tbScore(semester);
+    }//GEN-LAST:event_cbSemesterItemStateChanged
 
     /**
      * @param args the command line arguments
      */
+    public void prepareGUI_cbSemester(){
+        model_cbSemester = (DefaultComboBoxModel<String>) this.cbSemester.getModel();
+        model_cbSemester.removeAllElements();
+        String userID = new ConnectionOracle().getUserID();
+        try {
+            
+            connection.connect();
+            PreparedStatement ps = DBConnection.con.prepareCall("SELECT semester FROM Bangdiem WHERE STUDENTID = ?");
+            ps.setString(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                model_cbSemester.addElement(rs.getString(1));
+            }
+            connection.disconnect();
+        } catch (SQLException e) {
+                System.out.println(e);
+        }
+    }
+    public void prepareGUI_tbScore(String semester){
+        model_tbScore = (DefaultTableModel) this.tbScore.getModel();
+        model_tbScore.setRowCount(0);
+        String userID = new ConnectionOracle().getUserID();
+        int stt = 1;
+        double averageScore = 0;
+        int sumNumberOfCredits = 0;
+        try {
+            connection.connect();
+            String stringSQL = "SELECT SubjectID, SubjectName,NumberOfCredits,DiemQT,DiemGK,DiemTH,DiemCK,Score FROM Bangdiem bd,DIEMMONHOC dmh, SUBJECT s WHERE STUDENTID = ? AND bd.ID_BANGDIEM = dmh.ID_BANGDIEM AND bd.SEMESTER = ? AND s.SUBJECTID = dmh.ID_MONHOC";
+            PreparedStatement ps = DBConnection.con.prepareCall(stringSQL);
+            ps.setString(1, userID);
+            ps.setString(2, semester);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                String subjectID = rs.getString(1);
+                String subjectName = rs.getString(2);
+                int numberOfCredits = rs.getInt(3);
+                double diemQT = rs.getDouble(4);
+                double diemGK = rs.getDouble(5);
+                double diemTH = rs.getDouble(6);
+                double diemCK = rs.getDouble(7);
+                double score = rs.getDouble(8);
+                model_tbScore.addRow(new Object[]{stt,subjectID,subjectName,numberOfCredits,diemQT,diemGK,diemTH,diemCK,score});
+                stt++;
+                sumNumberOfCredits += numberOfCredits;
+                averageScore += score/numberOfCredits;
+            }
+            averageScore = Math.round(averageScore * 100.0)/100.0;
+            if(model_tbScore.getRowCount() > 0){
+                model_tbScore.addRow(new Object[]{null,null,"Trung bình học kỳ",sumNumberOfCredits,null,null,null,null,averageScore});
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -107,7 +331,7 @@ public class BangDiem extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -126,16 +350,38 @@ public class BangDiem extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BangDiem().setVisible(true);
+                BangDiem scoreTable = new BangDiem();
+                scoreTable.setVisible(true);
+                scoreTable.prepareGUI_cbSemester();
+                String semester = (String) scoreTable.cbSemester.getSelectedItem();
+                scoreTable.prepareGUI_tbScore(semester);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cbSemester;
+    private com.github.lgooddatepicker.components.DatePicker datePicker2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel lblClass;
+    private javax.swing.JLabel lblDoB;
+    private javax.swing.JLabel lblFaculty;
+    private javax.swing.JLabel lblGender;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblStudentID;
+    private javax.swing.JLabel lbl_cbSemester;
+    private javax.swing.JTable tbScore;
     // End of variables declaration//GEN-END:variables
+    private DefaultComboBoxModel<String> model_cbSemester;
+    private DefaultTableModel model_tbScore;
+    private DBConnection connection = new DBConnection();
 }
