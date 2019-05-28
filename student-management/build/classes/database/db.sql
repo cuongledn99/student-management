@@ -1,48 +1,48 @@
---drop database
-BEGIN
-   FOR cur_rec IN (SELECT object_name, object_type
-                     FROM user_objects
-                    WHERE object_type IN
-                             ('TABLE',
-                              'VIEW',
-                              'PACKAGE',
-                              'PROCEDURE',
-                              'FUNCTION',
-                              'SEQUENCE',
-                              'SYNONYM',
-                              'PACKAGE BODY'
-                             ))
-   LOOP
-      BEGIN
-         IF cur_rec.object_type = 'TABLE'
-         THEN
-            EXECUTE IMMEDIATE    'DROP '
-                              || cur_rec.object_type
-                              || ' "'
-                              || cur_rec.object_name
-                              || '" CASCADE CONSTRAINTS';
-         ELSE
-            EXECUTE IMMEDIATE    'DROP '
-                              || cur_rec.object_type
-                              || ' "'
-                              || cur_rec.object_name
-                              || '"';
-         END IF;
-      EXCEPTION
-         WHEN OTHERS
-         THEN
-            DBMS_OUTPUT.put_line (   'FAILED: DROP '
-                                  || cur_rec.object_type
-                                  || ' "'
-                                  || cur_rec.object_name
-                                  || '"'
-                                 );
-      END;
-   END LOOP;
-END;
+----drop database
+--BEGIN
+--   FOR cur_rec IN (SELECT object_name, object_type
+--                     FROM user_objects
+--                    WHERE object_type IN
+--                             ('TABLE',
+--                              'VIEW',
+--                              'PACKAGE',
+--                              'PROCEDURE',
+--                              'FUNCTION',
+--                              'SEQUENCE',
+--                              'SYNONYM',
+--                              'PACKAGE BODY'
+--                             ))
+--   LOOP
+--      BEGIN
+--         IF cur_rec.object_type = 'TABLE'
+--         THEN
+--            EXECUTE IMMEDIATE    'DROP '
+--                              || cur_rec.object_type
+--                              || ' "'
+--                              || cur_rec.object_name
+--                              || '" CASCADE CONSTRAINTS';
+--         ELSE
+--            EXECUTE IMMEDIATE    'DROP '
+--                              || cur_rec.object_type
+--                              || ' "'
+--                              || cur_rec.object_name
+--                              || '"';
+--         END IF;
+--      EXCEPTION
+--         WHEN OTHERS
+--         THEN
+--            DBMS_OUTPUT.put_line (   'FAILED: DROP '
+--                                  || cur_rec.object_type
+--                                  || ' "'
+--                                  || cur_rec.object_name
+--                                  || '"'
+--                                 );
+--      END;
+--   END LOOP;
+--END;
 
-commit;
-/
+--commit;
+--/
 CREATE TABLE Users (
   userID varchar2(10) PRIMARY KEY,
   userName varchar2(32),
@@ -415,63 +415,43 @@ INSERT INTO Semester VALUES ('2019-2020');
 COMMIT;
 /
 --insert Users Student
-INSERT INTO Users VALUES('SV001','Student User Name 1',NULL, 'Student Name 1', 'Male', NULL, NULL, '31/12/1999', 'Student Email 1', 'Student address 1');
-INSERT INTO Users VALUES('SV002','Student User Name 2',NULL, 'Student Name 2', 'Female', NULL, NULL, '31/12/1999', 'Student Email 2', 'Student address 2');
-INSERT INTO Users VALUES('SV003','Student User Name 3',NULL, 'Student Name 3', 'Male', NULL, NULL, '31/12/1999', 'Student Email 3', 'Student address 3');
-INSERT INTO Users VALUES('SV004','Student User Name 4',NULL, 'Student Name 4', 'Male', NULL, NULL, '31/12/1999', 'Student Email 4', 'Student address 4');
-INSERT INTO Users VALUES('SV005','Student User Name 5',NULL, 'Student Name 5', 'Female', NULL, NULL, '31/12/1999', 'Student Email 5', 'Student address 5');
-INSERT INTO Users VALUES('SV006','Student User Name 6',NULL, 'Student Name 6', 'Male', NULL, NULL, '31/12/1999', 'Student Email 6', 'Student address 6');
-INSERT INTO Users VALUES('SV007','Student User Name 7',NULL, 'Student Name 7', 'Male', NULL, NULL, '31/12/1999', 'Student Email 7', 'Student address 7');
-INSERT INTO Users VALUES('SV008','Student User Name 8',NULL, 'Student Name 8', 'Male', NULL, NULL, '31/12/1999', 'Student Email 8', 'Student address 8');
-INSERT INTO Users VALUES('SV009','Student User Name 9',NULL, 'Student Name 9', 'Female', NULL, NULL, '31/12/1999', 'Student Email 9', 'Student address 9');
-INSERT INTO Users VALUES('SV010','Student User Name 10',NULL, 'Student Name 10', 'Male', NULL, NULL, '31/12/1999', 'Student Email 10', 'Student address 10');
-INSERT INTO Users VALUES('SV011','Student User Name 11',NULL, 'Student Name 11', 'Male', NULL, NULL, '31/12/1999', 'Student Email 11', 'Student address 11');
-INSERT INTO Users VALUES('SV012','Student User Name 12',NULL, 'Student Name 12', 'Male', NULL, NULL, '31/12/1999', 'Student Email 12', 'Student address 12');
-INSERT INTO Users VALUES('SV013','Student User Name 13',NULL, 'Student Name 13', 'Female', NULL, NULL, '31/12/1999', 'Student Email 13', 'Student address 13');
-INSERT INTO Users VALUES('SV014','Student User Name 14',NULL, 'Student Name 14', 'Male', NULL, NULL, '31/12/1999', 'Student Email 14', 'Student address 14');
-INSERT INTO Users VALUES('SV015','Student User Name 15',NULL, 'Student Name 15', 'Male', NULL, NULL, '31/12/1999', 'Student Email 15', 'Student address 15');
-INSERT INTO Users VALUES('SV016','Student User Name 16',NULL, 'Student Name 16', 'Male', NULL, NULL, '31/12/1999', 'Student Email 16', 'Student address 16');
+insert into users values ('st01','a','1','huy cuong','Male','student','0234134','20/11/1999','email1','address1');
 COMMIT;
 /
 --insert Users Lecture
-INSERT INTO Users VALUES('LE001','Lecture User Name 1',NULL, 'Lecture Name 1', 'Male', NULL, NULL, '01/01/1985', 'Lecture Email 1', 'Lecture address 1');
-INSERT INTO Users VALUES('LE002','Lecture User Name 2',NULL, 'Lecture Name 2', 'Female', NULL, NULL, '01/01/1985', 'Lecture Email 2', 'Lecture address 2');
-INSERT INTO Users VALUES('LE003','Lecture User Name 3',NULL, 'Lecture Name 3', 'Male', NULL, NULL, '01/01/1985', 'Lecture Email 3', 'Lecture address 3');
-INSERT INTO Users VALUES('LE004','Lecture User Name 4',NULL, 'Lecture Name 4', 'Male', NULL, NULL, '01/01/1985', 'Lecture Email 4', 'Lecture address 4');
-INSERT INTO Users VALUES('LE005','Lecture User Name 5',NULL, 'Lecture Name 5', 'Female', NULL, NULL, '01/01/1985', 'Lecture Email 5', 'Lecture address 5');
-INSERT INTO Users VALUES('LE006','Lecture User Name 6',NULL, 'Lecture Name 6', 'Male', NULL, NULL, '01/01/1985', 'Lecture Email 6', 'Lecture address 6');
+insert into users values ('lec01','b','1','huy cuong','Male','lecture','0234134','20/11/1999','email1','address1');
 COMMIT;
 /
 --insert Users Phong Dao Tao
-INSERT INTO Users VALUES('PDT01','PDT User Name 1',NULL, 'PDT Name 1', 'Male', NULL, NULL, '01/01/1985', 'PDT Email 1', 'PDT address 1');
+insert into users values ('pdt01','c','1','huy cuong','Male','phongdaotao','0234134','20/11/1999','email1','address1');
 COMMIT;
 --insert Users IT department 
-INSERT INTO Users VALUES('ITD01','IT department User Name 1',NULL, 'IT department Name 1', 'Male', NULL, NULL, '01/01/1985', 'IT department Email 1', 'IT department address 1');
+insert into users values ('it01','cuongledn99','cuong123','huy cuong','Male','IT','0234134','20/11/1999','email1','address1');
 COMMIT;
 --insert Users CTSV
-INSERT INTO Users VALUES('CTS01','CTSV User Name 1',NULL, 'CTSV Name 1', 'Male', NULL, NULL, '01/01/1985', 'CTSV Email 1', 'CTSV address 1');
+insert into users values ('ctsv01','d','1','huy cuong','Male','ctsv','0234134','20/11/1999','email1','address1');
 COMMIT;
 --insert Users KHTC
-INSERT INTO Users VALUES('KHT01','KHTC User Name 1',NULL, 'KHTC Name 1', 'Male', NULL, NULL, '01/01/1985', 'KHTC Email 1', 'KHTC address 1');
+insert into users values ('tc01','e','1','huy cuong','Male','khtc','0234134','20/11/1999','email1','address1');
 COMMIT;
 --insert table Faculty
-INSERT INTO Faculty VALUES('FAC01','He Thong Thong Tin',NULL,'01/01/2010');
-INSERT INTO Faculty VALUES('FAC02','Mang May Tinh and Truyen Thong',NULL,'01/01/2010');
-INSERT INTO Faculty VALUES('FAC03','Cong Nghe Phan Mem',NULL,'01/01/2010');
-COMMIT;
+--INSERT INTO Faculty VALUES('FAC01','He Thong Thong Tin',NULL,'01/01/2010');
+--INSERT INTO Faculty VALUES('FAC02','Mang May Tinh and Truyen Thong',NULL,'01/01/2010');
+--INSERT INTO Faculty VALUES('FAC03','Cong Nghe Phan Mem',NULL,'01/01/2010');
+--COMMIT;
 --insert table Lecture
-INSERT INTO Lecture VALUES('LE001','FAC01',NULL);
-INSERT INTO Lecture VALUES('LE002','FAC01',NULL);
-INSERT INTO Lecture VALUES('LE003','FAC02',NULL);
-INSERT INTO Lecture VALUES('LE004','FAC02',NULL);
-INSERT INTO Lecture VALUES('LE005','FAC03',NULL);
-INSERT INTO Lecture VALUES('LE006','FAC03',NULL);
-COMMIT;
+--INSERT INTO Lecture VALUES('LE001','FAC01',NULL);
+--INSERT INTO Lecture VALUES('LE002','FAC01',NULL);
+--INSERT INTO Lecture VALUES('LE003','FAC02',NULL);
+--INSERT INTO Lecture VALUES('LE004','FAC02',NULL);
+--INSERT INTO Lecture VALUES('LE005','FAC03',NULL);
+--INSERT INTO Lecture VALUES('LE006','FAC03',NULL);
+--COMMIT;
 --insert table Class
-INSERT INTO Class VALUES('CLA01','HTCL 2018',NULL,'FAC01',0);
-INSERT INTO Class VALUES('CLA02','ATCL 2018',NULL,'FAC02',0);
-INSERT INTO Class VALUES('CLA03','PMCL 2018',NULL,'FAC03',0);
-COMMIT;
+--INSERT INTO Class VALUES('CLA01','HTCL 2018',NULL,'FAC01',0);
+--INSERT INTO Class VALUES('CLA02','ATCL 2018',NULL,'FAC02',0);
+--INSERT INTO Class VALUES('CLA03','PMCL 2018',NULL,'FAC03',0);
+--COMMIT;
 --trigger cap nhat classSizes
 CREATE OR REPLACE TRIGGER increase_classSize AFTER INSERT OR UPDATE ON Student
 FOR EACH ROW
@@ -503,125 +483,125 @@ BEGIN
 END;
 /
 --insert table Student 
-INSERT INTO Student VALUES('SV001','CLA01');
-INSERT INTO Student VALUES('SV002','CLA02');
-INSERT INTO Student VALUES('SV003','CLA01');
-INSERT INTO Student VALUES('SV004','CLA02');
-INSERT INTO Student VALUES('SV005','CLA01');
-INSERT INTO Student VALUES('SV006','CLA02');
-INSERT INTO Student VALUES('SV007','CLA01');
-INSERT INTO Student VALUES('SV008','CLA02');
-INSERT INTO Student VALUES('SV009','CLA01');
-INSERT INTO Student VALUES('SV010','CLA02');
-INSERT INTO Student VALUES('SV011','CLA01');
-INSERT INTO Student VALUES('SV012','CLA02');
-INSERT INTO Student VALUES('SV013','CLA01');
-INSERT INTO Student VALUES('SV014','CLA02');
-COMMIT;
+--INSERT INTO Student VALUES('SV001','CLA01');
+--INSERT INTO Student VALUES('SV002','CLA02');
+--INSERT INTO Student VALUES('SV003','CLA01');
+--INSERT INTO Student VALUES('SV004','CLA02');
+--INSERT INTO Student VALUES('SV005','CLA01');
+--INSERT INTO Student VALUES('SV006','CLA02');
+--INSERT INTO Student VALUES('SV007','CLA01');
+--INSERT INTO Student VALUES('SV008','CLA02');
+--INSERT INTO Student VALUES('SV009','CLA01');
+--INSERT INTO Student VALUES('SV010','CLA02');
+--INSERT INTO Student VALUES('SV011','CLA01');
+--INSERT INTO Student VALUES('SV012','CLA02');
+--INSERT INTO Student VALUES('SV013','CLA01');
+--INSERT INTO Student VALUES('SV014','CLA02');
+--COMMIT;
 --insert table PhongDaoTao
-INSERT INTO PhongDaoTao VALUES('PDT01');
-COMMIT;
+--INSERT INTO PhongDaoTao VALUES('PDT01');
+--COMMIT;
 
 --insert table Subject;
-INSERT INTO Subject VALUES('MH001','Subject Name 1',3,'FAC01',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH002','Subject Name 2',4,'FAC02',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH003','Subject Name 3',3,'FAC03',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH004','Subject Name 4',4,'FAC01','MH001','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH005','Subject Name 5',3,'FAC02','MH002','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH006','Subject Name 6',4,'FAC03',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH007','Subject Name 7',3,'FAC01','MH004','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH008','Subject Name 8',4,'FAC02',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-INSERT INTO Subject VALUES('MH009','Subject Name 9',3,'FAC03','MH003','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
-COMMIT;
+--INSERT INTO Subject VALUES('MH001','Subject Name 1',3,'FAC01',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH002','Subject Name 2',4,'FAC02',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH003','Subject Name 3',3,'FAC03',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH004','Subject Name 4',4,'FAC01','MH001','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH005','Subject Name 5',3,'FAC02','MH002','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH006','Subject Name 6',4,'FAC03',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH007','Subject Name 7',3,'FAC01','MH004','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH008','Subject Name 8',4,'FAC02',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--INSERT INTO Subject VALUES('MH009','Subject Name 9',3,'FAC03','MH003','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
+--COMMIT;
 --insert table BangDiem
-INSERT INTO BANGDIEM VALUES ('BD001','SV001','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD002','SV002','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD003','SV003','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD004','SV004','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD005','SV005','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD006','SV006','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD007','SV007','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD008','SV008','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD009','SV009','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD010','SV010','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD011','SV011','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD012','SV012','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD013','SV013','2018-2019');
-INSERT INTO BANGDIEM VALUES ('BD014','SV014','2018-2019');
-COMMIT;
+--INSERT INTO BANGDIEM VALUES ('BD001','SV001','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD002','SV002','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD003','SV003','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD004','SV004','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD005','SV005','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD006','SV006','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD007','SV007','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD008','SV008','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD009','SV009','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD010','SV010','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD011','SV011','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD012','SV012','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD013','SV013','2018-2019');
+--INSERT INTO BANGDIEM VALUES ('BD014','SV014','2018-2019');
+--COMMIT;
 
 --insert table IT_DEPARTMENT
-INSERT INTO IT_DEPARTMENT VALUES ('ITD01');
-COMMIT;
+--INSERT INTO IT_DEPARTMENT VALUES ('ITD01');
+--COMMIT;
 --insert table USER_MANAGEMENT
-INSERT INTO USER_MANAGEMENT VALUES('UM001','ITD01','ITD01',NULL,NULL,'SV001');
-INSERT INTO USER_MANAGEMENT VALUES('UM002','ITD01','ITD01',NULL,NULL,'SV002');
-INSERT INTO USER_MANAGEMENT VALUES('UM003','ITD01','ITD01',NULL,NULL,'SV003');
-INSERT INTO USER_MANAGEMENT VALUES('UM004','ITD01','ITD01',NULL,NULL,'SV004');
-INSERT INTO USER_MANAGEMENT VALUES('UM005','ITD01','ITD01',NULL,NULL,'SV005');
-INSERT INTO USER_MANAGEMENT VALUES('UM006','ITD01','ITD01',NULL,NULL,'SV006');
-INSERT INTO USER_MANAGEMENT VALUES('UM007','ITD01','ITD01',NULL,NULL,'SV007');
-INSERT INTO USER_MANAGEMENT VALUES('UM008','ITD01','ITD01',NULL,NULL,'SV008');
-INSERT INTO USER_MANAGEMENT VALUES('UM009','ITD01','ITD01',NULL,NULL,'SV009');
-INSERT INTO USER_MANAGEMENT VALUES('UM010','ITD01','ITD01',NULL,NULL,'SV010');
-INSERT INTO USER_MANAGEMENT VALUES('UM011','ITD01','ITD01',NULL,NULL,'SV011');
-INSERT INTO USER_MANAGEMENT VALUES('UM012','ITD01','ITD01',NULL,NULL,'SV012');
-INSERT INTO USER_MANAGEMENT VALUES('UM013','ITD01','ITD01',NULL,NULL,'SV013');
-INSERT INTO USER_MANAGEMENT VALUES('UM014','ITD01','ITD01',NULL,NULL,'SV014');
-COMMIT;
+--INSERT INTO USER_MANAGEMENT VALUES('UM001','ITD01','ITD01',NULL,NULL,'SV001');
+--INSERT INTO USER_MANAGEMENT VALUES('UM002','ITD01','ITD01',NULL,NULL,'SV002');
+--INSERT INTO USER_MANAGEMENT VALUES('UM003','ITD01','ITD01',NULL,NULL,'SV003');
+--INSERT INTO USER_MANAGEMENT VALUES('UM004','ITD01','ITD01',NULL,NULL,'SV004');
+--INSERT INTO USER_MANAGEMENT VALUES('UM005','ITD01','ITD01',NULL,NULL,'SV005');
+--INSERT INTO USER_MANAGEMENT VALUES('UM006','ITD01','ITD01',NULL,NULL,'SV006');
+--INSERT INTO USER_MANAGEMENT VALUES('UM007','ITD01','ITD01',NULL,NULL,'SV007');
+--INSERT INTO USER_MANAGEMENT VALUES('UM008','ITD01','ITD01',NULL,NULL,'SV008');
+--INSERT INTO USER_MANAGEMENT VALUES('UM009','ITD01','ITD01',NULL,NULL,'SV009');
+--INSERT INTO USER_MANAGEMENT VALUES('UM010','ITD01','ITD01',NULL,NULL,'SV010');
+--INSERT INTO USER_MANAGEMENT VALUES('UM011','ITD01','ITD01',NULL,NULL,'SV011');
+--INSERT INTO USER_MANAGEMENT VALUES('UM012','ITD01','ITD01',NULL,NULL,'SV012');
+--INSERT INTO USER_MANAGEMENT VALUES('UM013','ITD01','ITD01',NULL,NULL,'SV013');
+--INSERT INTO USER_MANAGEMENT VALUES('UM014','ITD01','ITD01',NULL,NULL,'SV014');
+--COMMIT;
 --insert table CTSV
-INSERT INTO CTSV VALUES('CTS01');
-COMMIT;
+--INSERT INTO CTSV VALUES('CTS01');
+--COMMIT;
 --insert table DIEMMONHOC
-INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH001');
-INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH002');
-INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH003');
-INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH004');
-COMMIT;
+--INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH001');
+--INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH002');
+--INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH003');
+--INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH004');
+--COMMIT;
 --insert table KHTC
-INSERT INTO KHTC VALUES ('KHT01');
-COMMIT;
---ínert table FEE
-INSERT INTO FEE VALUES ('HP001',14000000,'2018-2019','SV001',1,'KHT01');
-INSERT INTO FEE VALUES ('HP002',14000000,'2018-2019','SV002',0,NULL);
-INSERT INTO FEE VALUES ('HP003',14000000,'2018-2019','SV003',1,'KHT01');
-INSERT INTO FEE VALUES ('HP004',14000000,'2018-2019','SV004',0,NULL);
-INSERT INTO FEE VALUES ('HP005',14000000,'2018-2019','SV005',1,'KHT01');
-INSERT INTO FEE VALUES ('HP006',14000000,'2018-2019','SV006',0,NULL);
-INSERT INTO FEE VALUES ('HP007',14000000,'2018-2019','SV007',1,'KHT01');
-INSERT INTO FEE VALUES ('HP008',14000000,'2018-2019','SV008',0,NULL);
-INSERT INTO FEE VALUES ('HP009',14000000,'2018-2019','SV009',1,'KHT01');
-INSERT INTO FEE VALUES ('HP010',14000000,'2018-2019','SV010',0,NULL);
-INSERT INTO FEE VALUES ('HP011',14000000,'2018-2019','SV011',1,'KHT01');
-INSERT INTO FEE VALUES ('HP012',14000000,'2018-2019','SV012',0,NULL);
-INSERT INTO FEE VALUES ('HP013',14000000,'2018-2019','SV013',1,'KHT01');
-INSERT INTO FEE VALUES ('HP014',14000000,'2018-2019','SV014',0,NULL);
-INSERT INTO FEE VALUES ('HP015',7000000,'2019-2020','SV001',0,NULL);
-COMMIT;
+--INSERT INTO KHTC VALUES ('KHT01');
+--COMMIT;
+----ínert table FEE
+--INSERT INTO FEE VALUES ('HP001',14000000,'2018-2019','SV001',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP002',14000000,'2018-2019','SV002',0,NULL);
+--INSERT INTO FEE VALUES ('HP003',14000000,'2018-2019','SV003',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP004',14000000,'2018-2019','SV004',0,NULL);
+--INSERT INTO FEE VALUES ('HP005',14000000,'2018-2019','SV005',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP006',14000000,'2018-2019','SV006',0,NULL);
+--INSERT INTO FEE VALUES ('HP007',14000000,'2018-2019','SV007',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP008',14000000,'2018-2019','SV008',0,NULL);
+--INSERT INTO FEE VALUES ('HP009',14000000,'2018-2019','SV009',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP010',14000000,'2018-2019','SV010',0,NULL);
+--INSERT INTO FEE VALUES ('HP011',14000000,'2018-2019','SV011',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP012',14000000,'2018-2019','SV012',0,NULL);
+--INSERT INTO FEE VALUES ('HP013',14000000,'2018-2019','SV013',1,'KHT01');
+--INSERT INTO FEE VALUES ('HP014',14000000,'2018-2019','SV014',0,NULL);
+--INSERT INTO FEE VALUES ('HP015',7000000,'2019-2020','SV001',0,NULL);
+--COMMIT;
 --insert table DiemRenLuyen
-INSERT INTO DiemRenLuyen VALUES(1,'SV001',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(2,'SV002',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(3,'SV003',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(4,'SV004',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(5,'SV005',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(6,'SV006',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(7,'SV007',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(8,'SV008',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(9,'SV009',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(10,'SV010',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(11,'SV011',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(12,'SV012',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(13,'SV013',80,'2018-2019');
-INSERT INTO DiemRenLuyen VALUES(14,'SV014',80,'2018-2019');
-COMMIT;
+--INSERT INTO DiemRenLuyen VALUES(1,'SV001',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(2,'SV002',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(3,'SV003',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(4,'SV004',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(5,'SV005',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(6,'SV006',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(7,'SV007',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(8,'SV008',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(9,'SV009',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(10,'SV010',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(11,'SV011',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(12,'SV012',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(13,'SV013',80,'2018-2019');
+--INSERT INTO DiemRenLuyen VALUES(14,'SV014',80,'2018-2019');
+--COMMIT;
 --insert Offering
-INSERT INTO OFFERING VALUES('MH001.201','MH001','2018-2019',NULL,50);
-INSERT INTO OFFERING VALUES('MH001.101','MH001','2018-2019',NULL,100);
-INSERT INTO OFFERING VALUES('MH002.201','MH002','2018-2019',NULL,50);
-INSERT INTO OFFERING VALUES('MH004.201','MH004','2018-2019',NULL,50);
-INSERT INTO OFFERING VALUES('MH005.201','MH005','2018-2019',NULL,50);
-INSERT INTO OFFERING VALUES('MH006.201','MH006','2018-2019',NULL,50);
-COMMIT;
+--INSERT INTO OFFERING VALUES('MH001.201','MH001','2018-2019',NULL,50);
+--INSERT INTO OFFERING VALUES('MH001.101','MH001','2018-2019',NULL,100);
+--INSERT INTO OFFERING VALUES('MH002.201','MH002','2018-2019',NULL,50);
+--INSERT INTO OFFERING VALUES('MH004.201','MH004','2018-2019',NULL,50);
+--INSERT INTO OFFERING VALUES('MH005.201','MH005','2018-2019',NULL,50);
+--INSERT INTO OFFERING VALUES('MH006.201','MH006','2018-2019',NULL,50);
+--COMMIT;
 --Trgier Cap nhat diem mon hoc
 /
 CREATE OR REPLACE TRIGGER update_score_DiemMonHoc BEFORE UPDATE ON DIEMMONHOC
@@ -775,3 +755,8 @@ BEGIN
         EXIT WHEN v_now + (in_time * (1/86400)) <= SYSDATE;
     END LOOP;
 END;
+
+
+
+
+

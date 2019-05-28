@@ -261,6 +261,7 @@ public class QL_User extends javax.swing.JFrame {
                 });
             }
         } catch (Exception e) {
+            System.out.println("load data to table user error");
             System.out.println(e);
         }
         connection.disconnect();
