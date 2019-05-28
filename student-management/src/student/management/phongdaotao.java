@@ -46,7 +46,7 @@ public class phongdaotao extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
-                loadSubjectToTable(evt);
+                load_Subject_hocphan_khoa(evt);
             }
         });
 
@@ -179,9 +179,7 @@ public class phongdaotao extends javax.swing.JFrame {
 
     }
 
-    private void loadSubjectToTable(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_loadSubjectToTable
-        clearTable();
-
+    void loadSubjects() {
         DBConnection connection = new DBConnection();
 
         try {
@@ -209,20 +207,63 @@ public class phongdaotao extends javax.swing.JFrame {
             System.out.println(e);
         }
         connection.disconnect();
-    }//GEN-LAST:event_loadSubjectToTable
+    }
+
+    void loadHocphan() {
+
+    }
+
+    void loadFaculty() {
+        DBConnection connection = new DBConnection();
+        try {
+
+            connection.connect();
+
+            ResultSet result = connection.query("select facultyid,facultyname,dean,openeddate from faculty");
+
+            while (result.next()) {
+                
+                DefaultTableModel model = (DefaultTableModel) tableFaculty.getModel();
+                model.addRow(new Object[]{
+                    
+                    result.getString("facultyid"),
+                    result.getString("facultyname"),
+                    result.getString("dean"),
+                    result.getString("openeddate")
+                });
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("load faculty err");
+            System.out.println(e);
+        }
+
+        connection.disconnect();
+    }
+    private void load_Subject_hocphan_khoa(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_load_Subject_hocphan_khoa
+
+        clearTable();
+
+        loadSubjects();
+
+        loadHocphan();
+
+        loadFaculty();
+
+    }//GEN-LAST:event_load_Subject_hocphan_khoa
 
     private void btnAddFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFacultyActionPerformed
         new addFacultyForm().setVisible(true);
     }//GEN-LAST:event_btnAddFacultyActionPerformed
 
     private void btn_addSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addSubjectActionPerformed
-        
+
     }//GEN-LAST:event_btn_addSubjectActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFaculty;
