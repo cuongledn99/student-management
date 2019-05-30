@@ -5,6 +5,10 @@
  */
 package student.management;
 
+import java.sql.CallableStatement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Huy Cuong
@@ -16,6 +20,7 @@ public class addSubjectForm extends javax.swing.JFrame {
      */
     public addSubjectForm() {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -174,19 +179,52 @@ public class addSubjectForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectActionPerformed
-        
-        String subjectid =txtbox_subjectid.getText();
-        String subjectname  =txtbox_subjectname.getText();
-        String numberofcredits =txtbox_credit.getText();
-        String facultyid =txtbox_facultyid.getText();
-        String previoussubject =txtbox_presubject.getText();
-        String hesodiemqt =txtbox_diemqt.getText();
-        String hesodiemgk =txtbox_diemgk.getText();
-        String heosdiemck =txtbox_diemck.getText();
-        String hesodiemth =txtbox_diemth.getText();
-        String createdby =CONST.currentUserid;
-        String updatedby =createdby;
-        
+
+        String subjectid = txtbox_subjectid.getText();
+        String subjectname = txtbox_subjectname.getText();
+        String numberofcredits = txtbox_credit.getText();
+        String facultyid = txtbox_facultyid.getText();
+        String previoussubject = txtbox_presubject.getText();
+        previoussubject = previoussubject.equals("") ? null : previoussubject;
+        String hesodiemqt = txtbox_diemqt.getText();
+        String hesodiemgk = txtbox_diemgk.getText();
+        String hesodiemck = txtbox_diemck.getText();
+        String hesodiemth = txtbox_diemth.getText();
+        String createdby = CONST.currentUserid;
+        String updatedby = createdby;
+
+        DBConnection connection = new DBConnection();
+
+        try {
+
+            connection.connect();
+
+            String addSubjectSqlString = "{call addSubject(?,?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement addSubjectStatement = DBConnection.con.prepareCall(addSubjectSqlString);
+
+            addSubjectStatement.setString(1, subjectid);
+            addSubjectStatement.setString(2, subjectname);
+            addSubjectStatement.setString(3, numberofcredits);
+            addSubjectStatement.setString(4, facultyid);
+            addSubjectStatement.setString(5, previoussubject);
+            addSubjectStatement.setString(6, createdby);
+            addSubjectStatement.setString(7, updatedby);
+            addSubjectStatement.setString(8, hesodiemqt);
+            addSubjectStatement.setString(9, hesodiemgk);
+            addSubjectStatement.setString(10, hesodiemth);
+            addSubjectStatement.setString(11, hesodiemck);
+
+            System.out.println(addSubjectSqlString);
+            addSubjectStatement.execute();
+
+            JOptionPane.showMessageDialog(null, "Tạo môn học mới thành công");
+
+        } catch (Exception e) {
+            System.out.println("add subject err" + e);
+        }
+
+        connection.disconnect();
+
     }//GEN-LAST:event_btnAddSubjectActionPerformed
 
     /**

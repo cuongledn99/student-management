@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/phongdaotao.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/addSubjectForm.java</file>
+            <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/DangKyHP.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/login.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/signupForm.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/nbproject/build-impl.xml</file>
@@ -13,6 +14,8 @@
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/QL_User.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/addFacultyForm.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/manifest.mf</file>
+            <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/ConnectionOracle.java</file>
+            <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/BangDiem.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/nbproject/project.properties</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/DBConnection.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/CONST.java</file>
@@ -20,6 +23,7 @@
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/HttpRequest.java</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/build.xml</file>
             <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/StudentManagement.java</file>
+            <file>file:/C:/Users/Huy%20Cuong/Desktop/team/java/src/front-end/student-management/src/student/management/DangKiHP.java</file>
         </group>
     </open-files>
 </project-private>

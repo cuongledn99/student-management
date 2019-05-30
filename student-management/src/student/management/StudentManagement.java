@@ -12,7 +12,6 @@ public class StudentManagement {
 
     public static void main(String[] args) {
         
-
 //        Map<String, String> data = new HashMap<String, String>();
 //        data.put("username", "cuongledn99");
 //        data.put("password", "cuong123");

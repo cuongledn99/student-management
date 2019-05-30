@@ -18,6 +18,8 @@ public class CONST {
     public static String username ="system";
     public static String password ="123";
     public static String choosingUsername ;
+    public static String choosingSubjectID;
+    public static  String choosingFacultyID;
     public static login loginForm ;
     public static ArrayList<String> roles =new ArrayList<>();
     public static ArrayList<String> rolesID =new ArrayList<>();

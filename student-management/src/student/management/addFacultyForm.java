@@ -7,6 +7,7 @@ package student.management;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +21,7 @@ public class addFacultyForm extends javax.swing.JFrame {
      */
     public addFacultyForm() {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**

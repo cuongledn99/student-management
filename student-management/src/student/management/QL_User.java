@@ -24,6 +24,8 @@ public class QL_User extends javax.swing.JFrame {
      */
     void myCustomInit() {
         tableUsers.setDefaultEditor(Object.class, null);
+        
+        //setup event select one row
         ListSelectionModel cellSelectionModel = tableUsers.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

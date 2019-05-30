@@ -7,6 +7,8 @@ package student.management;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,6 +22,7 @@ public class phongdaotao extends javax.swing.JFrame {
      */
     public phongdaotao() {
         initComponents();
+        myCustomInit();
     }
 
     /**
@@ -68,6 +71,11 @@ public class phongdaotao extends javax.swing.JFrame {
         });
 
         btn_deleteSubject.setText("Xóa môn");
+        btn_deleteSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteSubjectActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -167,28 +175,60 @@ public class phongdaotao extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    void myCustomInit() {
+        
+        tableSubject.setDefaultEditor(Object.class, null);
+        tableFaculty.setDefaultEditor(Object.class, null);
+
+        //setup event select one row table subject
+        ListSelectionModel cellSelectionModelSubject = tableSubject.getSelectionModel();
+        cellSelectionModelSubject.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cellSelectionModelSubject.addListSelectionListener((ListSelectionEvent e) -> {
+            
+            int[] selectedRow = tableSubject.getSelectedRows();
+            String selectedSubject = (String) tableSubject.getValueAt(selectedRow[0], 0);
+            CONST.choosingSubjectID = selectedSubject;
+            
+        });
+
+        //setup event select one row table faculty
+        ListSelectionModel cellSelectionModelFaculty = tableFaculty.getSelectionModel();
+        cellSelectionModelFaculty.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cellSelectionModelFaculty.addListSelectionListener((ListSelectionEvent e) -> {
+            
+            int[] selectedRow = tableFaculty.getSelectedRows();
+            String selectedFaculty = (String) tableFaculty.getValueAt(selectedRow[0], 0);
+            CONST.choosingFacultyID = selectedFaculty;
+            
+        });
+    }
+
     void clearTable() {
         try {
-            DefaultTableModel dtm = (DefaultTableModel) tableSubject.getModel();
-            dtm.setRowCount(0);
-
+            DefaultTableModel dtmSubject = (DefaultTableModel) tableSubject.getModel();
+            //DefaultTableModel dtmHP = (DefaultTableModel) .getModel();
+            DefaultTableModel dtmFaculty = (DefaultTableModel) tableFaculty.getModel();
+            
+            dtmSubject.setRowCount(0);
+            dtmFaculty.setRowCount(0);
+            
         } catch (Exception e) {
             System.out.println("errror clear table");
             System.out.println(e);
         }
-
+        
     }
-
+    
     void loadSubjects() {
         DBConnection connection = new DBConnection();
-
+        
         try {
-
+            
             connection.connect();
             ResultSet result = connection.query("select subjectid,subjectname,numberofcredits,facultyname,previoussubject,hesodiemqt,hesodiemgk,hesodiemth,hesodiemck from subject,faculty where faculty.facultyid=subject.facultyid");
-
+            
             while (result.next()) {
-
+                
                 DefaultTableModel model = (DefaultTableModel) tableSubject.getModel();
                 model.addRow(new Object[]{
                     result.getString("subjectid"),
@@ -202,53 +242,52 @@ public class phongdaotao extends javax.swing.JFrame {
                     result.getString("hesodiemck")
                 });
             }
-
+            
         } catch (Exception e) {
             System.out.println(e);
         }
         connection.disconnect();
     }
-
+    
     void loadHocphan() {
-
+        
     }
-
+    
     void loadFaculty() {
         DBConnection connection = new DBConnection();
         try {
-
+            
             connection.connect();
-
+            
             ResultSet result = connection.query("select facultyid,facultyname,dean,openeddate from faculty");
-
+            
             while (result.next()) {
                 
                 DefaultTableModel model = (DefaultTableModel) tableFaculty.getModel();
                 model.addRow(new Object[]{
-                    
                     result.getString("facultyid"),
                     result.getString("facultyname"),
                     result.getString("dean"),
                     result.getString("openeddate")
                 });
             }
-
+            
         } catch (Exception e) {
-
+            
             System.out.println("load faculty err");
             System.out.println(e);
         }
-
+        
         connection.disconnect();
     }
     private void load_Subject_hocphan_khoa(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_load_Subject_hocphan_khoa
-
+        
         clearTable();
-
+        
         loadSubjects();
-
+        
         loadHocphan();
-
+        
         loadFaculty();
 
     }//GEN-LAST:event_load_Subject_hocphan_khoa
@@ -258,8 +297,16 @@ public class phongdaotao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddFacultyActionPerformed
 
     private void btn_addSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addSubjectActionPerformed
-
+        new addSubjectForm().setVisible(true);
     }//GEN-LAST:event_btn_addSubjectActionPerformed
+
+    private void btn_deleteSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteSubjectActionPerformed
+        DBConnection connection = new DBConnection();
+        
+        connection.connect();
+        
+        connection.disconnect();
+    }//GEN-LAST:event_btn_deleteSubjectActionPerformed
 
     /**
      * @param args the command line arguments

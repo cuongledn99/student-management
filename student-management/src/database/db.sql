@@ -857,3 +857,41 @@ begin
   insert into faculty values(facultyid_in,facultyname_in,deanid_in,currentdate);
 end;
 
+create or replace procedure addSubject
+(
+subjectid subject.subjectid%type,
+subjectName subject.subjectname%type,
+credits subject.numberofcredits%type,
+facultyid subject.facultyid%type,
+preSubject subject.previoussubject%type,
+createdBy subject.createdBy%type,
+updatedBy subject.updatedBy%type,
+qt subject.hesodiemqt%type,
+gk number,
+th subject.hesodiemth%type,
+ck subject.hesodiemck%type
+)
+
+as
+  createdDate_temp date;
+  updatedDate_temp date;
+begin
+  select sysdate into createdDate_temp from dual;
+  select sysdate into updatedDate_temp from dual;
+  insert into subject values
+  (subjectid,
+  subjectName,
+  credits,
+  facultyid,
+  preSubject,
+  createdBy,
+  updatedBy,
+  qt,
+  gk,
+  th,
+  ck,
+  createdDate_temp,
+  updatedDate_temp
+);
+end;
+
