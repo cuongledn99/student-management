@@ -42,6 +42,8 @@ public class phongdaotao extends javax.swing.JFrame {
         btn_deleteSubject = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         openOffering = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableOffering = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableFaculty = new javax.swing.JTable();
@@ -94,7 +96,7 @@ public class phongdaotao extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_addSubject)
                     .addComponent(btn_deleteSubject))
@@ -110,19 +112,44 @@ public class phongdaotao extends javax.swing.JFrame {
             }
         });
 
+        tableOffering.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã học phần", "Mã môn học", "Mã giảng viên", "Sĩ số lớp", "Học kỳ"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tableOffering);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(631, Short.MAX_VALUE)
-                .addComponent(openOffering)
-                .addGap(112, 112, 112))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(39, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(openOffering)
+                        .addGap(112, 112, 112))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(276, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(openOffering)
                 .addGap(37, 37, 37))
         );
@@ -166,7 +193,7 @@ public class phongdaotao extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(80, 80, 80)
                 .addComponent(btnAddFaculty)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Quản lý khoa", jPanel3);
@@ -193,6 +220,7 @@ public class phongdaotao extends javax.swing.JFrame {
         
         tableSubject.setDefaultEditor(Object.class, null);
         tableFaculty.setDefaultEditor(Object.class, null);
+        tableOffering.setDefaultEditor(Object.class, null);
 
         //setup event select one row table subject
         ListSelectionModel cellSelectionModelSubject = tableSubject.getSelectionModel();
@@ -213,6 +241,17 @@ public class phongdaotao extends javax.swing.JFrame {
             int[] selectedRow = tableFaculty.getSelectedRows();
             String selectedFaculty = (String) tableFaculty.getValueAt(selectedRow[0], 0);
             CONST.choosingFacultyID = selectedFaculty;
+            
+        });
+        
+        //setup event select one row offering
+        ListSelectionModel cellSelectionModelOffering = tableOffering.getSelectionModel();
+        cellSelectionModelOffering.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cellSelectionModelOffering.addListSelectionListener((ListSelectionEvent e) -> {
+            
+            int[] selectedRow = tableOffering.getSelectedRows();
+            String selectedOffering = (String) tableOffering.getValueAt(selectedRow[0], 0);
+            CONST.choosingOffering = selectedOffering;
             
         });
     }
@@ -265,6 +304,32 @@ public class phongdaotao extends javax.swing.JFrame {
     
     void loadHocphan() {
         
+        DBConnection connection = new DBConnection();
+        try {
+            
+            connection.connect();
+            
+            ResultSet result = connection.query("select *from offering");
+            
+            while (result.next()) {
+                
+                DefaultTableModel model = (DefaultTableModel) tableOffering.getModel();
+                model.addRow(new Object[]{
+                    result.getString("offeringid"),
+                    result.getString("subjectid"),
+                    result.getString("subjectid"),
+                    result.getString("slot"),
+                    result.getString("semester")
+                });
+            }
+            
+        } catch (Exception e) {
+            
+            System.out.println("load offering err");
+            System.out.println(e);
+        }
+        
+        connection.disconnect();
     }
     
     void loadFaculty() {
@@ -327,6 +392,7 @@ public class phongdaotao extends javax.swing.JFrame {
     }//GEN-LAST:event_openOfferingActionPerformed
 
     
+    
     /**
      * @param args the command line arguments
      */
@@ -340,9 +406,11 @@ public class phongdaotao extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JButton openOffering;
     private javax.swing.JTable tableFaculty;
+    private javax.swing.JTable tableOffering;
     private javax.swing.JTable tableSubject;
     // End of variables declaration//GEN-END:variables
 }

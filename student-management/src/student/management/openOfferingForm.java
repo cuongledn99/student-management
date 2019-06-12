@@ -5,6 +5,12 @@
  */
 package student.management;
 
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Huy Cuong
@@ -16,6 +22,7 @@ public class openOfferingForm extends javax.swing.JFrame {
      */
     public openOfferingForm() {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -35,10 +42,14 @@ public class openOfferingForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        btn_createOffering = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        combobox_semester.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                loadSemesterToCombobox(evt);
+            }
+        });
 
         jLabel1.setText("ID môn học");
 
@@ -47,6 +58,13 @@ public class openOfferingForm extends javax.swing.JFrame {
         jLabel3.setText("sỉ số lớp");
 
         jLabel4.setText("Học kỳ");
+
+        btn_createOffering.setText("Tạo");
+        btn_createOffering.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_createOfferingActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,7 +83,11 @@ public class openOfferingForm extends javax.swing.JFrame {
                     .addComponent(txtbox_idsubject)
                     .addComponent(txtbox_idlecture)
                     .addComponent(txtbox_amount))
-                .addContainerGap(184, Short.MAX_VALUE))
+                .addContainerGap(212, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_createOffering)
+                .addGap(48, 48, 48))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,16 +110,84 @@ public class openOfferingForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(combobox_semester, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addComponent(btn_createOffering)
+                .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+    private void btn_createOfferingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createOfferingActionPerformed
+
+        String subjectID = txtbox_idsubject.getText();
+        String lectureID = txtbox_idlecture.getText();
+        String slot = txtbox_amount.getText();
+        String semester = combobox_semester.getSelectedItem().toString();
+
+        DBConnection connection = new DBConnection();
+
+        try {
+
+            connection.connect();
+
+            String sqlsStringCreateOffering = "{call CREATEOFFERING(?,?,?,?)}";
+            CallableStatement createOfferingStatement = DBConnection.con.prepareCall(sqlsStringCreateOffering);
+
+            createOfferingStatement.setString(1, subjectID);
+            createOfferingStatement.setString(2, semester);
+            createOfferingStatement.setString(3, lectureID);
+            createOfferingStatement.setString(4, slot);
+
+            createOfferingStatement.execute();
+
+            connection.disconnect();
+            
+            JOptionPane.showMessageDialog(null, "Thêm học phần thành công");
+
+        } catch (Exception e) {
+
+            System.out.println("err create new offering " + e);
+            connection.disconnect();
+            
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, vui lòng thử lại sau");
+        }
+
+    }//GEN-LAST:event_btn_createOfferingActionPerformed
+
+    /**
+     * this function has a bug it load duplicate semester
+     *
+     * @param evt
+     */
+    private void loadSemesterToCombobox(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_loadSemesterToCombobox
+
+        DBConnection connection = new DBConnection();
+
+        try {
+
+            connection.connect();
+
+            ResultSet result = connection.query("select semesterid from semester");
+
+            while (result.next()) {
+
+                CONST.semester.add(result.getString("semesterid"));
+                combobox_semester.addItem(result.getString("semesterid"));
+            }
+
+            connection.disconnect();
+
+        } catch (Exception e) {
+
+            System.out.println("err load semester in offering form " + e);
+            connection.disconnect();
+        }
+    }//GEN-LAST:event_loadSemesterToCombobox
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_createOffering;
     private javax.swing.JComboBox<String> combobox_semester;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

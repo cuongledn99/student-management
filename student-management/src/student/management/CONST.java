@@ -17,11 +17,20 @@ public class CONST {
     public static String dbname ="orcl2";
     public static String username ="system";
     public static String password ="123";
+    
     public static String choosingUsername ;
     public static String choosingSubjectID;
     public static  String choosingFacultyID;
+    public static  String choosingOffering;
+    
     public static login loginForm ;
+    
     public static ArrayList<String> roles =new ArrayList<>();
     public static ArrayList<String> rolesID =new ArrayList<>();
+    
+    public static ArrayList<String> semester =new ArrayList<>();
+    
     public static String currentUserid =null;
+    
+    public static int loadTime =0;//this variable for shove load semester problem
 }
