@@ -907,10 +907,14 @@ as
   offeringid offering.offeringid%type;
 begin 
 
-select 'offering'||to_char(seq_Offering.nextval,'FM0000000') into offeringid from dual;
+  select 'off'||to_char(seq_Offering.nextval,'FM00000')  into offeringid from dual;
 
-insert into offering values(offeringid,subjectID,semester,lecture,slot);
+  insert into offering values(offeringid,subjectID,semester,lecture,slot);
 
+end;
+
+begin
+CREATEOFFERING('sub01','2018-2019','lec01',40);
 end;
 
 
