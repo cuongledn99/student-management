@@ -41,6 +41,7 @@ public class phongdaotao extends javax.swing.JFrame {
         btn_addSubject = new javax.swing.JButton();
         btn_deleteSubject = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        openOffering = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableFaculty = new javax.swing.JTable();
@@ -102,15 +103,28 @@ public class phongdaotao extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Quản lý môn học", jPanel1);
 
+        openOffering.setText("Mở học phần");
+        openOffering.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openOfferingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 836, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(631, Short.MAX_VALUE)
+                .addComponent(openOffering)
+                .addGap(112, 112, 112))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 336, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(276, Short.MAX_VALUE)
+                .addComponent(openOffering)
+                .addGap(37, 37, 37))
         );
 
         jTabbedPane3.addTab("Quản lý học phần", jPanel2);
@@ -308,6 +322,11 @@ public class phongdaotao extends javax.swing.JFrame {
         connection.disconnect();
     }//GEN-LAST:event_btn_deleteSubjectActionPerformed
 
+    private void openOfferingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openOfferingActionPerformed
+        new openOfferingForm().setVisible(true);
+    }//GEN-LAST:event_openOfferingActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -322,6 +341,7 @@ public class phongdaotao extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JButton openOffering;
     private javax.swing.JTable tableFaculty;
     private javax.swing.JTable tableSubject;
     // End of variables declaration//GEN-END:variables
