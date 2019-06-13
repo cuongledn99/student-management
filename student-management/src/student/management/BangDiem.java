@@ -40,23 +40,20 @@ public class BangDiem extends javax.swing.JFrame {
         lblStudentID = new javax.swing.JLabel();
         lblDoB = new javax.swing.JLabel();
         lbl_cbSemester = new javax.swing.JLabel();
-        lblClass = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        txtbox_fullname = new javax.swing.JTextField();
+        txtbox_id = new javax.swing.JTextField();
+        txtbox_dob = new javax.swing.JTextField();
+        txtbox_gender = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbScore = new javax.swing.JTable();
         cbSemester = new javax.swing.JComboBox<>();
-        lblFaculty = new javax.swing.JLabel();
         lblGender1 = new javax.swing.JLabel();
+        btn_logout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
-                loadBangdiem(evt);
+                loadBangdiem_userInfo(evt);
             }
         });
         getContentPane().setLayout(null);
@@ -98,7 +95,7 @@ public class BangDiem extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 780, 90);
+        jPanel1.setBounds(0, 30, 780, 60);
 
         jPanel2.setBackground(new java.awt.Color(250, 250, 250));
 
@@ -110,32 +107,22 @@ public class BangDiem extends javax.swing.JFrame {
 
         lbl_cbSemester.setText("Bảng Điểm:");
 
-        lblClass.setText("Lớp");
+        txtbox_fullname.setEditable(false);
+        txtbox_fullname.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        txtbox_fullname.setText("Dương Quốc Cường");
+        txtbox_fullname.setEditable(false);
 
-        jTextField1.setEditable(false);
-        jTextField1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTextField1.setText("Dương Quốc Cường");
-        jTextField1.setEditable(false);
+        txtbox_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        txtbox_id.setText("jTextField2");
+        txtbox_id.setEditable(false);
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTextField2.setText("jTextField2");
-        jTextField2.setEditable(false);
+        txtbox_dob.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        txtbox_dob.setText("jTextField2");
+        txtbox_dob.setEditable(false);
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTextField3.setText("jTextField2");
-        jTextField3.setEditable(false);
-
-        jTextField4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTextField4.setText("jTextField2");
-        jTextField4.setEditable(false);
-
-        jTextField5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTextField5.setText("jTextField2");
-        jTextField5.setEditable(false);
-
-        jTextField6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTextField6.setText("jTextField2");
-        jTextField6.setEditable(false);
+        txtbox_gender.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        txtbox_gender.setText("jTextField2");
+        txtbox_gender.setEditable(false);
 
         tbScore.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -178,8 +165,6 @@ public class BangDiem extends javax.swing.JFrame {
             }
         });
 
-        lblFaculty.setText("Khoa:");
-
         lblGender1.setText("Giới Tính");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -191,33 +176,26 @@ public class BangDiem extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblStudentID, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                    .addComponent(lbl_cbSemester, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblFaculty, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lbl_cbSemester, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cbSemester, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                    .addComponent(jTextField2)
-                    .addComponent(jTextField3))
+                    .addComponent(txtbox_fullname, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                    .addComponent(txtbox_id))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblDoB, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(lblClass, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtbox_dob, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtbox_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(175, 175, 175))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 773, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -226,34 +204,40 @@ public class BangDiem extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtbox_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtbox_dob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblDoB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblClass, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblFaculty, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtbox_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtbox_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(46, 46, 46)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_cbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 90, 780, 600);
+        jPanel2.setBounds(0, 140, 780, 550);
+
+        btn_logout.setText("Đăng xuất");
+        btn_logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_logoutActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_logout);
+        btn_logout.setBounds(643, 100, 100, 40);
 
         setBounds(0, 0, 795, 681);
     }// </editor-fold>//GEN-END:initComponents
@@ -274,12 +258,41 @@ public class BangDiem extends javax.swing.JFrame {
         dkhp.prepareUI_panelThongTin();
     }//GEN-LAST:event_lableDKHPMouseClicked
 
-    private void loadBangdiem(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_loadBangdiem
+    private void loadBangdiem_userInfo(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_loadBangdiem_userInfo
 
+        //load user info
+        String getUserInfoStringSQL = "select fullname,studentid,dateofbirth,gender from student,users where student.STUDENTID = users.USERID and studentid = '" + CONST.currentUserid + "'";
+
+        DBConnection connection = new DBConnection();
+
+        connection.connect();
+
+        try {
+
+            ResultSet result = connection.query(getUserInfoStringSQL);
+            if (result.next()) {
+                txtbox_fullname.setText(result.getString("fullname"));
+                txtbox_dob.setText(result.getString("dateofbirth"));
+                txtbox_gender.setText(result.getString("gender"));
+                txtbox_id.setText(result.getString("studentid"));
+            }
+        } catch (Exception e) {
+
+            System.out.println("err load user info " + e);
+        }
+
+        connection.disconnect();
+
+        //load bang diem
         prepareGUI_cbSemester();
         String semester = (String) CbSemester.getSelectedItem();
         prepareGUI_tbScore(semester);
-    }//GEN-LAST:event_loadBangdiem
+    }//GEN-LAST:event_loadBangdiem_userInfo
+
+    private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
+        CONST.loginForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_logoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -376,26 +389,23 @@ public class BangDiem extends javax.swing.JFrame {
 //    }
     public javax.swing.JComboBox<String> CbSemester;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_logout;
     private javax.swing.JComboBox<String> cbSemester;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JLabel lableBangdiem;
     private javax.swing.JLabel lableDKHP;
-    private javax.swing.JLabel lblClass;
     private javax.swing.JLabel lblDoB;
-    private javax.swing.JLabel lblFaculty;
     private javax.swing.JLabel lblGender1;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblStudentID;
     private javax.swing.JLabel lbl_cbSemester;
     private javax.swing.JTable tbScore;
+    private javax.swing.JTextField txtbox_dob;
+    private javax.swing.JTextField txtbox_fullname;
+    private javax.swing.JTextField txtbox_gender;
+    private javax.swing.JTextField txtbox_id;
     // End of variables declaration//GEN-END:variables
     private DefaultComboBoxModel<String> model_cbSemester;
     private DefaultTableModel model_tbScore;

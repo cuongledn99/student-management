@@ -38,8 +38,6 @@ public class DangKyHP extends javax.swing.JFrame {
         lableDKHP = new javax.swing.JLabel();
         TabbedPane = new javax.swing.JTabbedPane();
         panelThongTin = new javax.swing.JPanel();
-        lblName = new javax.swing.JLabel();
-        lblStudentID = new javax.swing.JLabel();
         lblTitle_tbOfferingRegistered = new javax.swing.JLabel();
         Scroll_tbOfferingRegistered = new javax.swing.JScrollPane();
         tbOfferingRegistered = new javax.swing.JTable();
@@ -51,6 +49,11 @@ public class DangKyHP extends javax.swing.JFrame {
         lblSuccessNotification = new javax.swing.JLabel();
         lblErrorNotification = new javax.swing.JLabel();
         lblTitle_tbOfferingRegistered1 = new javax.swing.JLabel();
+        btn_logout = new javax.swing.JButton();
+        lblName = new javax.swing.JLabel();
+        lblStudentID = new javax.swing.JLabel();
+        lableFullname = new javax.swing.JLabel();
+        lableID = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 600));
@@ -99,10 +102,6 @@ public class DangKyHP extends javax.swing.JFrame {
 
         panelThongTin.setBackground(new java.awt.Color(250, 250, 250));
 
-        lblName.setText("Họ và Tên:");
-
-        lblStudentID.setText("MSSV: ");
-
         lblTitle_tbOfferingRegistered.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitle_tbOfferingRegistered.setText("Học Phần Đã Đăng Ký");
 
@@ -143,40 +142,29 @@ public class DangKyHP extends javax.swing.JFrame {
         panelThongTin.setLayout(panelThongTinLayout);
         panelThongTinLayout.setHorizontalGroup(
             panelThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelThongTinLayout.createSequentialGroup()
-                .addGap(121, 121, 121)
-                .addComponent(Scroll_tbOfferingRegistered)
-                .addGap(118, 118, 118))
             .addGroup(panelThongTinLayout.createSequentialGroup()
-                .addGroup(panelThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelThongTinLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelThongTinLayout.createSequentialGroup()
-                        .addGap(331, 331, 331)
-                        .addComponent(lblTitle_tbOfferingRegistered, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panelThongTinLayout.createSequentialGroup()
-                        .addGap(353, 353, 353)
-                        .addComponent(btnDeleteOffering, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(23, 23, 23)))
+                .addGap(331, 331, 331)
+                .addComponent(lblTitle_tbOfferingRegistered, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                 .addGap(336, 336, 336))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelThongTinLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Scroll_tbOfferingRegistered)
+                .addGap(43, 43, 43))
+            .addGroup(panelThongTinLayout.createSequentialGroup()
+                .addGap(374, 374, 374)
+                .addComponent(btnDeleteOffering, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelThongTinLayout.setVerticalGroup(
             panelThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelThongTinLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblStudentID)
-                .addGap(4, 4, 4)
+                .addGap(49, 49, 49)
                 .addComponent(lblTitle_tbOfferingRegistered)
-                .addGap(29, 29, 29)
-                .addComponent(Scroll_tbOfferingRegistered, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Scroll_tbOfferingRegistered, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnDeleteOffering)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addComponent(btnDeleteOffering, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
         );
 
         TabbedPane.addTab("Thông tin", panelThongTin);
@@ -263,10 +251,25 @@ public class DangKyHP extends javax.swing.JFrame {
                         .addComponent(lblErrorNotification)))
                 .addGap(30, 30, 30)
                 .addComponent(btnDangKy)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         TabbedPane.addTab("Đăng Ký Học Phần", panelDangKyHocPhan);
+
+        btn_logout.setText("Đăng xuất");
+        btn_logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_logoutActionPerformed(evt);
+            }
+        });
+
+        lblName.setText("Họ và Tên:");
+
+        lblStudentID.setText("MSSV: ");
+
+        lableFullname.setText("jLabel1");
+
+        lableID.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -274,40 +277,68 @@ public class DangKyHP extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(TabbedPane)
             .addComponent(panelHeader, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lableID)
+                    .addComponent(lableFullname))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_logout)
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblName)
+                            .addComponent(lableFullname))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblStudentID)
+                            .addComponent(lableID))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
 
-        setBounds(0, 0, 921, 706);
+        setBounds(0, 0, 921, 707);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteOfferingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteOfferingActionPerformed
+        System.out.println("delte function");
         connection.connect();
         String offeringID, semester;
-        String userID = new ConnectionOracle().getUserID();
+        String userID = CONST.currentUserid;
+        System.out.println("current user: " + userID);
+        System.out.println("table lenght: " + tbOfferingRegistered.getRowCount());
         CallableStatement cstm;
         for (int i = 0; i < tbOfferingRegistered.getRowCount(); i++) {
             Boolean status_Checkbox = (Boolean) tbOfferingRegistered.getModel().getValueAt(i, 5);
             if (status_Checkbox) {
                 try {
+                    System.out.println("line 316");
                     offeringID = (String) tbOfferingRegistered.getModel().getValueAt(i, 0);
                     semester = (String) tbOfferingRegistered.getModel().getValueAt(i, 3);
-                    
+
                     String stringSQL = "{call DELETE_SUBJECT_REGISTRATION(?,?,?)}";
                     cstm = DBConnection.con.prepareCall(stringSQL);
                     cstm.setString(1, userID);
                     cstm.setString(2, offeringID);
                     cstm.setString(3, semester);
                     cstm.executeQuery();
-                    
+                    System.out.println("line 326");
+
                 } catch (SQLException e) {
-                    
+
                     System.out.println("loi huy hoc phan " + e);
                 }
             }
@@ -317,29 +348,28 @@ public class DangKyHP extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteOfferingActionPerformed
 
     private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
-        System.out.println("dk hp event");
+
         lblErrorNotification.setText("");
         lblSuccessNotification.setText("");
         connection.connect();
         String ma_offering, semester, PDT_id;
         String errorNotification = "";
         String successNotification = "";
-        String userID = new ConnectionOracle().getUserID();
-        
-        
+        String userID = CONST.currentUserid;
+
         CallableStatement callProc;
         for (int i = 0; i < tbBangDangKyHP.getRowCount(); i++) {
             Boolean status_Checkbox = (Boolean) tbBangDangKyHP.getModel().getValueAt(i, 5);
-            
+
             if (status_Checkbox) {
-                
+
                 ma_offering = (String) tbBangDangKyHP.getModel().getValueAt(i, 0);
                 semester = (String) tbBangDangKyHP.getModel().getValueAt(i, 3);
                 PDT_id = null;
-                
+
                 try {
                     String stringSQL = "{call INSERT_SUBJECT_REGISTRATION(?,?,?,?)}";
-                    System.out.println(stringSQL);
+
                     callProc = DBConnection.con.prepareCall(stringSQL);
                     callProc.setString(1, userID);
                     callProc.setString(2, PDT_id);
@@ -348,7 +378,7 @@ public class DangKyHP extends javax.swing.JFrame {
                     callProc.executeQuery();
                     successNotification += ma_offering + "<br>";
                 } catch (SQLException e) {
-                    
+
                     System.out.println("loi khi dang ki hoc phan " + e);
                     System.out.println(e.getErrorCode());
                     if (e.getErrorCode() == 20001) {
@@ -370,7 +400,7 @@ public class DangKyHP extends javax.swing.JFrame {
         connection.disconnect();
         this.prepareUI_panelThongTin();
         this.prepareUI_panelDangKyHP();
-        
+
     }//GEN-LAST:event_btnDangKyActionPerformed
 
     //load view bangdiem
@@ -397,11 +427,46 @@ public class DangKyHP extends javax.swing.JFrame {
         System.out.println("iam called");
     }//GEN-LAST:event_TabbedPaneComponentShown
 
+    //load hoc phan
+    //load thong tin 
+    //load user info
     private void loadHocPhan_Thongtin(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_loadHocPhan_Thongtin
 
+        //load user info
+        String getUserInfoStringSQL = "select fullname from users where userid = '" + CONST.currentUserid + "'";
+
+        DBConnection connection = new DBConnection();
+
+        connection.connect();
+
+        try {
+
+            ResultSet result = connection.query(getUserInfoStringSQL);
+
+            if (result.next()) {
+
+                lableFullname.setText(result.getString("fullname"));
+                lableID.setText(CONST.currentUserid);
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("err load user info " + e);
+        }
+
+        connection.disconnect();
+        
+        
+        //load hoc phan
+        //load thong tin 
         prepareUI_panelDangKyHP();
         prepareUI_panelThongTin();
     }//GEN-LAST:event_loadHocPhan_Thongtin
+
+    private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
+        CONST.loginForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_logoutActionPerformed
     public void prepareUI_panelDangKyHP() {
         System.out.println("preparing dkhp");
         model_tbBangDangKyHP = (DefaultTableModel) tbBangDangKyHP.getModel();
@@ -438,7 +503,7 @@ public class DangKyHP extends javax.swing.JFrame {
     public void prepareUI_panelThongTin() {
         model_tbOfferingRegistered = (DefaultTableModel) tbOfferingRegistered.getModel();
         model_tbOfferingRegistered.setRowCount(0);
-        String userID = new ConnectionOracle().getUserID();
+        String userID = CONST.currentUserid;
         try {
             connection.connect();
             String stringSQL = "SELECT o.OfferingID,o.semester,SubjectName,LectureID,Slot FROM SUBJECT_REGISTRATION sr, Offering o, subject s WHERE o.OFFERINGID = sr.OFFERINGID AND o.SUBJECTID = s.SUBJECTID AND sr.REGISTEREDBY = ?";
@@ -507,8 +572,11 @@ public class DangKyHP extends javax.swing.JFrame {
     private javax.swing.JTabbedPane TabbedPane;
     private javax.swing.JButton btnDangKy;
     private javax.swing.JButton btnDeleteOffering;
+    private javax.swing.JButton btn_logout;
     private javax.swing.JLabel lableBangdiem;
     private javax.swing.JLabel lableDKHP;
+    private javax.swing.JLabel lableFullname;
+    private javax.swing.JLabel lableID;
     private javax.swing.JLabel lblErrorNotification;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblStudentID;
