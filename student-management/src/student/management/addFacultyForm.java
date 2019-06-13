@@ -7,6 +7,7 @@ package student.management;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -40,6 +41,10 @@ public class addFacultyForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnAddFaculty = new javax.swing.JButton();
+        txtbox_lecturename = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        btn_searchname = new javax.swing.JButton();
+        lable_nameResult = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,6 +61,17 @@ public class addFacultyForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Tìm giảng viên theo tên");
+
+        btn_searchname.setText("Tìm");
+        btn_searchname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_searchnameActionPerformed(evt);
+            }
+        });
+
+        lable_nameResult.setText("jLabel5");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -66,16 +82,31 @@ public class addFacultyForm extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
-                .addGap(63, 63, 63)
+                .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtbox_facultydean, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtbox_facultyname, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtbox_facultyid, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(145, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAddFaculty)
-                .addGap(51, 51, 51))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtbox_facultydean, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(txtbox_facultyname, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(89, 89, 89)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lable_nameResult)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(txtbox_lecturename, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btn_searchname)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAddFaculty)
+                                .addGap(244, 244, 244)))
+                        .addContainerGap(60, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(txtbox_facultyid, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(56, 56, 56))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,18 +114,23 @@ public class addFacultyForm extends javax.swing.JFrame {
                 .addGap(62, 62, 62)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtbox_facultyid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(37, 37, 37)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4))
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtbox_facultyname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(54, 54, 54)
+                    .addComponent(jLabel2)
+                    .addComponent(txtbox_lecturename, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_searchname))
+                .addGap(29, 29, 29)
+                .addComponent(lable_nameResult)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtbox_facultydean, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addGap(51, 51, 51)
                 .addComponent(btnAddFaculty)
-                .addContainerGap())
+                .addContainerGap(132, Short.MAX_VALUE))
         );
 
         pack();
@@ -109,10 +145,10 @@ public class addFacultyForm extends javax.swing.JFrame {
 
         try {
             connection.connect();
-            
-            String sqlsStringAddFaculty ="{call addFaculty(?,?,?)}";
-            CallableStatement addFacultyStatement =DBConnection.con.prepareCall(sqlsStringAddFaculty);
-            
+
+            String sqlsStringAddFaculty = "{call addFaculty(?,?,?)}";
+            CallableStatement addFacultyStatement = DBConnection.con.prepareCall(sqlsStringAddFaculty);
+
             addFacultyStatement.setString(1, facultyid);
             addFacultyStatement.setString(2, facultyname);
             addFacultyStatement.setString(3, facultyDean);
@@ -127,6 +163,43 @@ public class addFacultyForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra, vui lòng thử lại sau !");
         }
     }//GEN-LAST:event_btnAddFacultyActionPerformed
+
+    private void btn_searchnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchnameActionPerformed
+
+        lable_nameResult.setText("");
+        String lectureName = txtbox_lecturename.getText();
+
+        DBConnection connection = new DBConnection();
+
+        try {
+
+            connection.connect();
+
+            String queryString = "select * from users where fullname like '%" + lectureName + "%'";
+            System.out.println(queryString);
+            ResultSet result = connection.query(queryString);
+
+            String resultSearch = "<html>";
+            while (result.next()) {
+                
+                System.out.println(result.getString("userid"));
+                resultSearch+="<BR>";
+                resultSearch += result.getString("userid") + "---" + result.getString("fullname");
+                resultSearch+="<BR>";
+                
+            }
+            resultSearch+="</html>";
+            lable_nameResult.setText(resultSearch);
+            connection.disconnect();
+
+        } catch (Exception e) {
+
+            System.out.println("err search lecture: " + e);
+            connection.disconnect();
+        }
+
+
+    }//GEN-LAST:event_btn_searchnameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,11 +238,15 @@ public class addFacultyForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFaculty;
+    private javax.swing.JButton btn_searchname;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel lable_nameResult;
     private javax.swing.JTextField txtbox_facultydean;
     private javax.swing.JTextField txtbox_facultyid;
     private javax.swing.JTextField txtbox_facultyname;
+    private javax.swing.JTextField txtbox_lecturename;
     // End of variables declaration//GEN-END:variables
 }

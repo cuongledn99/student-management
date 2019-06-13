@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,6 +93,20 @@ public class DBConnection {
         return null;
     }
 
-    
+    public void update(String query) {
+        
+        System.out.println("update sql: "+query);
+        try {
+            System.out.println("line 100");
+            Statement statement = con.createStatement();
+            System.out.println("line 102");
+            statement.executeUpdate(query);
+            System.out.println("line 104");
+        } catch (Exception e) {
+            
+            System.out.println("err when excute update "+e);
+        }
+
+    }
 
 }

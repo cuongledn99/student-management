@@ -279,6 +279,8 @@ ADD (CONSTRAINT FK_subjectID_Offering FOREIGN KEY (subjectID)
     REFERENCES Semester(SemesterID));
 COMMIT;
 /
+create sequence seq_Offering  start with 1 increment by 1;
+/
 --Alter table Subject_Registration
 ALTER TABLE Subject_Registration
 ADD (CONSTRAINT FK_registeredBy_Subject_Registration FOREIGN KEY (registeredBy)
@@ -893,5 +895,25 @@ begin
   createdDate_temp,
   updatedDate_temp
 );
+end;
+
+create or replace procedure createOffering(
+  subjectID offering.subjectid%type, 
+  semester offering.semester%type,
+  lecture offering.lectureid%type,
+  slot offering.slot%type
+)
+as
+  offeringid offering.offeringid%type;
+begin 
+
+  select 'off'||to_char(seq_Offering.nextval,'FM00000')  into offeringid from dual;
+
+  insert into offering values(offeringid,subjectID,semester,lecture,slot);
+
+end;
+
+begin
+CREATEOFFERING('sub01','2018-2019','lec01',40);
 end;
 

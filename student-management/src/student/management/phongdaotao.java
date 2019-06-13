@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import sun.misc.REException;
 
 /**
  *
@@ -39,11 +40,11 @@ public class phongdaotao extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableSubject = new javax.swing.JTable();
         btn_addSubject = new javax.swing.JButton();
-        btn_deleteSubject = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         openOffering = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableOffering = new javax.swing.JTable();
+        btn_editOffering = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableFaculty = new javax.swing.JTable();
@@ -73,13 +74,6 @@ public class phongdaotao extends javax.swing.JFrame {
             }
         });
 
-        btn_deleteSubject.setText("Xóa môn");
-        btn_deleteSubject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_deleteSubjectActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -87,8 +81,6 @@ public class phongdaotao extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 836, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_deleteSubject)
-                .addGap(26, 26, 26)
                 .addComponent(btn_addSubject)
                 .addGap(34, 34, 34))
         );
@@ -97,9 +89,7 @@ public class phongdaotao extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_addSubject)
-                    .addComponent(btn_deleteSubject))
+                .addComponent(btn_addSubject)
                 .addContainerGap())
         );
 
@@ -130,6 +120,13 @@ public class phongdaotao extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tableOffering);
 
+        btn_editOffering.setText("Chỉnh sửa");
+        btn_editOffering.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editOfferingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -138,6 +135,8 @@ public class phongdaotao extends javax.swing.JFrame {
                 .addContainerGap(39, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(btn_editOffering)
+                        .addGap(18, 18, 18)
                         .addComponent(openOffering)
                         .addGap(112, 112, 112))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -150,7 +149,9 @@ public class phongdaotao extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(openOffering)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(openOffering)
+                    .addComponent(btn_editOffering))
                 .addGap(37, 37, 37))
         );
 
@@ -217,7 +218,7 @@ public class phongdaotao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     void myCustomInit() {
-        
+
         tableSubject.setDefaultEditor(Object.class, null);
         tableFaculty.setDefaultEditor(Object.class, null);
         tableOffering.setDefaultEditor(Object.class, null);
@@ -226,33 +227,33 @@ public class phongdaotao extends javax.swing.JFrame {
         ListSelectionModel cellSelectionModelSubject = tableSubject.getSelectionModel();
         cellSelectionModelSubject.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         cellSelectionModelSubject.addListSelectionListener((ListSelectionEvent e) -> {
-            
+
             int[] selectedRow = tableSubject.getSelectedRows();
             String selectedSubject = (String) tableSubject.getValueAt(selectedRow[0], 0);
             CONST.choosingSubjectID = selectedSubject;
-            
+
         });
 
         //setup event select one row table faculty
         ListSelectionModel cellSelectionModelFaculty = tableFaculty.getSelectionModel();
         cellSelectionModelFaculty.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         cellSelectionModelFaculty.addListSelectionListener((ListSelectionEvent e) -> {
-            
+
             int[] selectedRow = tableFaculty.getSelectedRows();
             String selectedFaculty = (String) tableFaculty.getValueAt(selectedRow[0], 0);
             CONST.choosingFacultyID = selectedFaculty;
-            
+
         });
-        
+
         //setup event select one row offering
         ListSelectionModel cellSelectionModelOffering = tableOffering.getSelectionModel();
         cellSelectionModelOffering.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         cellSelectionModelOffering.addListSelectionListener((ListSelectionEvent e) -> {
-            
+
             int[] selectedRow = tableOffering.getSelectedRows();
             String selectedOffering = (String) tableOffering.getValueAt(selectedRow[0], 0);
             CONST.choosingOffering = selectedOffering;
-            
+
         });
     }
 
@@ -262,26 +263,29 @@ public class phongdaotao extends javax.swing.JFrame {
             //DefaultTableModel dtmHP = (DefaultTableModel) .getModel();
             DefaultTableModel dtmFaculty = (DefaultTableModel) tableFaculty.getModel();
             
+            DefaultTableModel dtmOffering = (DefaultTableModel) tableOffering.getModel();
+
             dtmSubject.setRowCount(0);
             dtmFaculty.setRowCount(0);
-            
+            dtmOffering.setRowCount(0);
+
         } catch (Exception e) {
             System.out.println("errror clear table");
             System.out.println(e);
         }
-        
+
     }
-    
+
     void loadSubjects() {
         DBConnection connection = new DBConnection();
-        
+
         try {
-            
+
             connection.connect();
             ResultSet result = connection.query("select subjectid,subjectname,numberofcredits,facultyname,previoussubject,hesodiemqt,hesodiemgk,hesodiemth,hesodiemck from subject,faculty where faculty.facultyid=subject.facultyid");
-            
+
             while (result.next()) {
-                
+
                 DefaultTableModel model = (DefaultTableModel) tableSubject.getModel();
                 model.addRow(new Object[]{
                     result.getString("subjectid"),
@@ -295,24 +299,24 @@ public class phongdaotao extends javax.swing.JFrame {
                     result.getString("hesodiemck")
                 });
             }
-            
+
         } catch (Exception e) {
             System.out.println(e);
         }
         connection.disconnect();
     }
-    
+
     void loadHocphan() {
-        
+
         DBConnection connection = new DBConnection();
         try {
-            
+
             connection.connect();
-            
+
             ResultSet result = connection.query("select *from offering");
-            
+
             while (result.next()) {
-                
+
                 DefaultTableModel model = (DefaultTableModel) tableOffering.getModel();
                 model.addRow(new Object[]{
                     result.getString("offeringid"),
@@ -322,26 +326,26 @@ public class phongdaotao extends javax.swing.JFrame {
                     result.getString("semester")
                 });
             }
-            
+
         } catch (Exception e) {
-            
+
             System.out.println("load offering err");
             System.out.println(e);
         }
-        
+
         connection.disconnect();
     }
-    
+
     void loadFaculty() {
         DBConnection connection = new DBConnection();
         try {
-            
+
             connection.connect();
-            
+
             ResultSet result = connection.query("select facultyid,facultyname,dean,openeddate from faculty");
-            
+
             while (result.next()) {
-                
+
                 DefaultTableModel model = (DefaultTableModel) tableFaculty.getModel();
                 model.addRow(new Object[]{
                     result.getString("facultyid"),
@@ -350,23 +354,23 @@ public class phongdaotao extends javax.swing.JFrame {
                     result.getString("openeddate")
                 });
             }
-            
+
         } catch (Exception e) {
-            
+
             System.out.println("load faculty err");
             System.out.println(e);
         }
-        
+
         connection.disconnect();
     }
     private void load_Subject_hocphan_khoa(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_load_Subject_hocphan_khoa
-        
+
         clearTable();
-        
+
         loadSubjects();
-        
+
         loadHocphan();
-        
+
         loadFaculty();
 
     }//GEN-LAST:event_load_Subject_hocphan_khoa
@@ -379,20 +383,43 @@ public class phongdaotao extends javax.swing.JFrame {
         new addSubjectForm().setVisible(true);
     }//GEN-LAST:event_btn_addSubjectActionPerformed
 
-    private void btn_deleteSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteSubjectActionPerformed
-        DBConnection connection = new DBConnection();
-        
-        connection.connect();
-        
-        connection.disconnect();
-    }//GEN-LAST:event_btn_deleteSubjectActionPerformed
-
     private void openOfferingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openOfferingActionPerformed
         new openOfferingForm().setVisible(true);
     }//GEN-LAST:event_openOfferingActionPerformed
 
-    
-    
+    private void btn_editOfferingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editOfferingActionPerformed
+
+        loadOfferingDetailToOfferingForm(CONST.choosingOffering);
+    }//GEN-LAST:event_btn_editOfferingActionPerformed
+
+    void loadOfferingDetailToOfferingForm(String id) {
+        
+        updateOfferingForm updateForm =new updateOfferingForm();
+        updateForm.setVisible(true);
+
+        DBConnection connection = new DBConnection();
+
+        try {
+
+            connection.connect();
+
+            ResultSet result = connection.query("select*from offering where offeringid = '" + id + "' ");
+
+            while (result.next()) {
+                System.out.println(result.getString("subjectid"));
+                updateForm.setLectureID(result.getString("lectureid"));
+                updateForm.setAmount(Integer.toString(result.getInt("slot")));
+            }
+
+            connection.disconnect();
+
+        } catch (Exception e) {
+
+            System.out.println("err load  offering detail to form " + e);
+        }
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -400,7 +427,7 @@ public class phongdaotao extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFaculty;
     private javax.swing.JButton btn_addSubject;
-    private javax.swing.JButton btn_deleteSubject;
+    private javax.swing.JButton btn_editOffering;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

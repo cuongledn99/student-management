@@ -59,7 +59,7 @@ public class openOfferingForm extends javax.swing.JFrame {
 
         jLabel4.setText("Học kỳ");
 
-        btn_createOffering.setText("Tạo");
+        btn_createOffering.setText("Lưu");
         btn_createOffering.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_createOfferingActionPerformed(evt);
@@ -185,6 +185,21 @@ public class openOfferingForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_loadSemesterToCombobox
 
+    public void setSubjectID(String id){
+       txtbox_idsubject.setText(id);
+    }
+    
+    public void setLectureID(String id){
+        txtbox_idlecture.setText(id);
+    }
+    
+    public void setAmount(String amount){
+        txtbox_amount.setText(amount);
+    }
+    
+    public void setSemester(String semester){
+        combobox_semester.getEditor().setItem(semester);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_createOffering;

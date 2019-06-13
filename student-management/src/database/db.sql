@@ -917,5 +917,3 @@ begin
 CREATEOFFERING('sub01','2018-2019','lec01',40);
 end;
 
-
-

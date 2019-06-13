@@ -112,7 +112,7 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
-        new phongdaotao().setVisible(true);
+        new QL_User().setVisible(true);
         this.setVisible(false);
 //        String username = txtbox_username.getText();
 //        String password = txtbox_password.getText();

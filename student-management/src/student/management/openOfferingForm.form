@@ -123,7 +123,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btn_createOffering">
       <Properties>
-        <Property name="text" type="java.lang.String" value="T&#x1ea1;o"/>
+        <Property name="text" type="java.lang.String" value="L&#x1b0;u"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_createOfferingActionPerformed"/>
