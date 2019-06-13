@@ -550,11 +550,15 @@ AS
     cur_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
     v_status number := 0;
     v_status2 number := 0;
+    v_status3 number := 0;	
     v_idBangDiem BANGDIEM.ID_BANGDIEM%TYPE;
     v_lectureID LECTURE.LECTUREID%TYPE;
     v_date varchar2(255);
     v_registered number;
     v_slot number;
+    v_hocphi number;
+    v_tinchi number;
+    v_studentID STUDENT.STUDENTID%TYPE;
     CURSOR cur IS SELECT ID_BANGDIEM
                   FROM BANGDIEM
                   WHERE BANGDIEM.STUDENTID = in_studentID;
@@ -633,6 +637,33 @@ BEGIN
             v_idBangDiem := GETBANGDIEMID();
             INSERT INTO BANGDIEM VALUES (v_idBangDiem,in_studentID,in_semester);
        END IF;
+       
+       SELECT SUBJECT.NUMBEROFCREDITS
+        INTO v_tinchi
+        FROM SUBJECT
+        WHERE SUBJECT.SUBJECTID = v_SubjectID;
+        
+        v_hocphi := v_tinchi * 500000;
+        
+        BEGIN
+            SELECT FEE.STUDENTID
+            INTO v_studentID
+            FROM FEE
+            WHERE FEE.STUDENTID = in_studentID AND FEE.SEMESTER = in_semester;
+            EXCEPTION 
+            WHEN NO_data_found
+            THEN
+                v_status3 := 1;
+        END;
+        IF(v_status3 = 1)
+        THEN
+            INSERT INTO FEE VALUES (FEE_ID_SEQ.NEXTVAL,v_hocphi,in_semester,in_studentID,0,NULL);
+        ELSE 
+            UPDATE fee
+            set MONEY = MONEY + v_hocphi
+            WHERE fee.STUDENTID = in_studentID AND fee.SEMESTER = in_semester;
+        END IF;
+       
        INSERT INTO SUBJECT_REGISTRATION VALUES (registrationID_SEQ.NEXTVAL,in_studentID,in_PDT_ID,in_offeringID,in_semester);
        SELECT TO_CHAR(SYSDATE, 'DD-MM-YYYY') INTO v_date FROM dual;
        dbms_output.put_line(v_date);
@@ -645,6 +676,9 @@ CREATE OR REPLACE PROCEDURE DELETE_SUBJECT_REGISTRATION (in_studentID STUDENT.ST
 AS
     v_subjectID SUBJECT.SUBJECTID%TYPE;
     v_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
+    v_tinchi number;
+    v_hocphi number;
+    v_money number;
 BEGIN
     SELECT bd.ID_BANGDIEM
     INTO v_BangDiemID
@@ -655,6 +689,27 @@ BEGIN
     INTO v_subjectID
     FROM OFFERING
     WHERE OFFERING.OFFERINGID = in_offeringID;
+    
+    SELECT SUBJECT.NUMBEROFCREDITS
+    INTO v_tinchi
+    FROM SUBJECT
+    WHERE SUBJECT.SUBJECTID = v_subjectID;
+    
+    v_hocphi := v_tinchi * 500000;
+    
+    UPDATE fee
+    set MONEY = MONEY - v_hocphi
+    WHERE fee.STUDENTID = in_studentID AND fee.SEMESTER = in_semester;
+    
+    SELECT FEE.money
+    INTO v_money
+    FROM FEE
+    WHERE FEE.STUDENTID = in_studentID AND FEE.SEMESTER = in_semester;
+    
+    IF(v_money = 0)
+    THEN
+        DELETE FROM fee WHERE fee.STUDENTID = in_studentID AND fee.SEMESTER = in_semester;
+    END IF;
     
     DELETE FROM SUBJECT_REGISTRATION sr WHERE sr.REGISTEREDBY = in_studentID AND sr.OFFERINGID = in_offeringID AND sr.SEMESTER = in_semester;
     DELETE FROM DIEMMONHOC dmh WHERE dmh.ID_BANGDIEM = v_BangDiemID AND dmh.ID_MONHOC = v_subjectID;
