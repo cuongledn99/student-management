@@ -7,6 +7,8 @@ package student.management;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -187,7 +189,8 @@ public class phongdaotao extends javax.swing.JFrame {
         try {
 
             connection.connect();
-            ResultSet result = connection.query("select subjectid,subjectname,numberofcredits,facultyname,previoussubject,hesodiemqt,hesodiemgk,hesodiemth,hesodiemck from subject,faculty where faculty.facultyid=subject.facultyid");
+            Statement stmt = DBConnection.con.createStatement();
+            ResultSet result = stmt.executeQuery("select subjectid,subjectname,numberofcredits,facultyname,previoussubject,hesodiemqt,hesodiemgk,hesodiemth,hesodiemck from subject,faculty where faculty.facultyid=subject.facultyid");
 
             while (result.next()) {
 
@@ -205,7 +208,7 @@ public class phongdaotao extends javax.swing.JFrame {
                 });
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
         connection.disconnect();

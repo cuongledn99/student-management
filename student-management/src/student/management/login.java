@@ -115,8 +115,8 @@ public class login extends javax.swing.JFrame {
 //        dkhp.prepareUI_panelDangKyHP();
 //        dkhp.prepareUI_panelThongTin();
 //        dkhp.setVisible(true);
-          QL_User quanly_user = new QL_User();
-          quanly_user.setVisible(true);
+          phongdaotao pdt = new phongdaotao();
+          pdt.setVisible(true);
           this.setVisible(false);
 //        String username = txtbox_username.getText();
 //        String password = txtbox_password.getText();

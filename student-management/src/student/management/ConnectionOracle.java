@@ -14,6 +14,7 @@ import java.sql.*;
 
 public class ConnectionOracle {
     private String userID = "SV001";
+    private String lectureID = "LE001";
     private static String user = "DOAN";
     private static String password = "123456";
     private static String connectionObject = "jdbc:oracle:thin:@localhost:1521:orcl";
@@ -31,6 +32,9 @@ public class ConnectionOracle {
     }
     public String getUserID(){
         return userID;
+    }
+    public String getLectureID(){
+        return lectureID;
     }
     public static void main(String[] args) {
         try {
