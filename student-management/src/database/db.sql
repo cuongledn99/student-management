@@ -312,6 +312,15 @@ ADD (CONSTRAINT FK_studentID_BangDiem FOREIGN KEY (studentID)
     CONSTRAINT FK_semester_BangDiem FOREIGN KEY (semester)
     REFERENCES Semester(SemesterID));
 COMMIT;
+CREATE SEQUENCE BangDiem_ID_SEQ
+ INCREMENT BY 1
+ START WITH 1
+ NOMAXVALUE
+ MINVALUE 1
+ NOCYCLE
+ NOCACHE;
+COMMIT;
+/
 --Alter table DiemMonHoc
 ALTER TABLE DiemMonHoc
 ADD (CONSTRAINT FK_createdBy_DiemMonHoc FOREIGN KEY (createdBy)
@@ -637,6 +646,16 @@ BEGIN
     :NEW.score := :NEW.diemQT * v_HeSoQT + :NEW.diemGK * v_HeSoGK + :NEW.diemTH * v_HeSoTH + :NEW.diemCK * v_HeSoCK;
 END;
 /
+
+
+
+-- function generate BangDiemID
+CREATE OR REPLACE FUNCTION getBangDiemID RETURN varchar2 IS
+BEGIN
+    RETURN 'BD' || BangDiem_ID_SEQ.nextval;
+END;
+/
+--th? t?c thêm vào b?ng SUBJECT_REGISTRATION làm ??ng ký h?c ph?n.
 CREATE OR REPLACE PROCEDURE INSERT_SUBJECT_REGISTRATION (in_studentID STUDENT.STUDENTID%TYPE,in_PDT_ID PHONGDAOTAO.PDT_ID%TYPE, 
 in_offeringID OFFERING.OFFERINGID%TYPE, in_semester OFFERING.SEMESTER%TYPE)
 AS
@@ -646,6 +665,12 @@ AS
     v_SubjectID SUBJECT.SUBJECTID%TYPE;
     cur_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
     v_status number := 0;
+    v_status2 number := 0;
+    v_idBangDiem BANGDIEM.ID_BANGDIEM%TYPE;
+    v_lectureID LECTURE.LECTUREID%TYPE;
+    v_date varchar2(255);
+    v_registered number;
+    v_slot number;
     CURSOR cur IS SELECT ID_BANGDIEM
                   FROM BANGDIEM
                   WHERE BANGDIEM.STUDENTID = in_studentID;
@@ -683,26 +708,106 @@ BEGIN
             END IF;
        END IF;
        
-       SELECT subjectID
-       INTO v_SubjectID
+       SELECT subjectID,LectureID,slot
+       INTO v_SubjectID,v_lectureID,v_slot
        FROM OFFERING
        WHERE OFFERING.OFFERINGID = in_offeringID;
        
        SELECT COUNT(*)
        INTO v_countSubject
        FROM SUBJECT_REGISTRATION sr, OFFERING o, SUBJECT s
-       WHERE sr.REGISTEREDBY= 'SV001' AND sr.OFFERINGID = o.OFFERINGID AND o.SUBJECTID = s.SUBJECTID AND o.SUBJECTID = v_SubjectID ;
+       WHERE sr.REGISTEREDBY= in_studentID AND sr.OFFERINGID = o.OFFERINGID AND o.SUBJECTID = s.SUBJECTID AND o.SUBJECTID = v_SubjectID ;
 
        IF(v_countSubject > 0)
        THEN
             RAISE_APPLICATION_ERROR(-20001, 'Mon nay da duoc dang ky');
        END IF;
+       
+       SELECT COUNT(offeringID) 
+       INTO v_registered 
+       FROM SUBJECT_REGISTRATION 
+       WHERE offeringID = in_offeringID;
+       
+       IF(v_registered >= v_slot)
+       THEN
+            RAISE_APPLICATION_ERROR(-20002, 'Lop Da Full');
+       END IF;
+       
        SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+       BEGIN
+            SELECT ID_BangDiem
+            INTO v_idBangDiem
+            FROM BangDiem 
+            WHERE BangDiem.STUDENTID = in_studentID AND semester = in_semester;
+            EXCEPTION 
+            WHEN NO_data_found
+            THEN
+                v_status2 := 1;
+       END;
+       IF(v_status2 = 1)
+       THEN
+            v_idBangDiem := GETBANGDIEMID();
+            INSERT INTO BANGDIEM VALUES (v_idBangDiem,in_studentID,in_semester);
+       END IF;
        INSERT INTO SUBJECT_REGISTRATION VALUES (registrationID_SEQ.NEXTVAL,in_studentID,in_PDT_ID,in_offeringID,in_semester);
+       SELECT TO_CHAR(SYSDATE, 'DD-MM-YYYY') INTO v_date FROM dual;
+       dbms_output.put_line(v_date);
+       INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,v_lectureID,TO_DATE(v_date,'DD-MM-YYYY'),v_idBangDiem,v_SubjectID);
        COMMIT;
 END;
 /
-
+-- th? t?c c?p nh?t ?i?m cho sinh viên.
+CREATE OR REPLACE PROCEDURE Update_diem (in_studentID STUDENT.STUDENTID%TYPE,
+                                         in_semester BANGDIEM.SEMESTER%TYPE,
+                                         in_offeringID OFFERING.OFFERINGID%TYPE,
+                                         in_lectureID LECTURE.LECTUREID%TYPE,
+                                         in_diemQT DIEMMONHOC.DIEMQT%TYPE,
+                                         in_diemGK DIEMMONHOC.DIEMQT%TYPE,
+                                         in_diemTH DIEMMONHOC.DIEMQT%TYPE,
+                                         in_diemCK DIEMMONHOC.DIEMQT%TYPE)
+AS
+    v_dmhID DIEMMONHOC.ID_DIEMMONHOC%TYPE;
+BEGIN
+    SELECT dmh.ID_DIEMMONHOC
+    INTO v_dmhID
+    FROM bangdiem bd,diemmonhoc dmh 
+    WHERE bd.STUDENTID = in_studentID AND bd.SEMESTER = in_semester 
+    AND bd.ID_BANGDIEM = dmh.ID_BANGDIEM AND dmh.CREATEDBY = in_lectureID 
+    AND dmh.ID_MONHOC = (SELECT o.SUBJECTID
+                            FROM offering o WHERE
+                            o.OFFERINGID = in_offeringID);
+    IF(in_diemQT > 10 OR in_diemGK > 10 OR in_diemTH > 10 OR in_diemCK > 10)
+    THEN
+        RAISE_APPLICATION_ERROR(-20007, 'Cap Nhat Sai Diem');
+    END IF;
+    set TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    UPDATE DIEMMONHOC
+    set diemQT = in_diemQT, diemGK = in_diemGK, diemTH = in_diemTH, diemCK = in_diemCK
+    WHERE DIEMMONHOC.ID_DIEMMONHOC = v_dmhID;
+    COMMIT;
+END;
+/
+-- th? t?c xóa ??ng ký h?c ph?n.
+CREATE OR REPLACE PROCEDURE DELETE_SUBJECT_REGISTRATION (in_studentID STUDENT.STUDENTID%TYPE,in_offeringID OFFERING.OFFERINGID%TYPE,in_semester OFFERING.SEMESTER%TYPE)
+AS
+    v_subjectID SUBJECT.SUBJECTID%TYPE;
+    v_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
+BEGIN
+    SELECT bd.ID_BANGDIEM
+    INTO v_BangDiemID
+    FROM BANGDIEM bd
+    WHERE bd.STUDENTID = in_studentID AND bd.SEMESTER = in_semester;
+    
+    SELECT SUBJECTID
+    INTO v_subjectID
+    FROM OFFERING
+    WHERE OFFERING.OFFERINGID = in_offeringID;
+    
+    DELETE FROM SUBJECT_REGISTRATION sr WHERE sr.REGISTEREDBY = in_studentID AND sr.OFFERINGID = in_offeringID AND sr.SEMESTER = in_semester;
+    DELETE FROM DIEMMONHOC dmh WHERE dmh.ID_BANGDIEM = v_BangDiemID AND dmh.ID_MONHOC = v_subjectID;
+    COMMIT;
+END;
+/
 
 CREATE OR REPLACE PROCEDURE print_Fee (in_StudentID IN STUDENT.STUDENTID%TYPE)
 AS
@@ -915,5 +1020,9 @@ end;
 
 begin
 CREATEOFFERING('sub01','2018-2019','lec01',40);
+end;
+
+begin
+DELETE_SUBJECT_REGISTRATION('st02','off00026','2017-2018');
 end;
 
