@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package student.management;
-import com.github.lgooddatepicker.components.DatePickerSettings;
 import javax.swing.*;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
