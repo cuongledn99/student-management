@@ -8,12 +8,18 @@ package student.management;
 import com.google.gson.Gson;
 import java.awt.TextField;
 import java.sql.CallableStatement;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -341,13 +347,15 @@ public class signupForm extends javax.swing.JFrame {
         String fullname = txtbox_fullname.getText();
         String email = txtbox_email.getText();
         String dob = txtbox_dob.getText();
+        
+
         String phone = txtbox_phone.getText();
         String address = txtbox_address.getText();
         String gender = combobox_gender.getItemAt(combobox_gender.getSelectedIndex());
         String userid = txtbox_id.getText();
-        
+
         DBConnection connection = new DBConnection();
-        
+
         if (checkUserName(username) && isValidID(userid)) {
 
             try {
@@ -356,6 +364,10 @@ public class signupForm extends javax.swing.JFrame {
 
                 String sql = "{call addUser(?,?,?,?,?,?,?,?,?,?)}";
                 CallableStatement statement = DBConnection.con.prepareCall(sql);
+                
+                Statement setDateFormatStatement = DBConnection.con.createStatement();
+                setDateFormatStatement.execute("alter session set NLS_DATE_FORMAT = 'dd/mm/yyyy'");
+
                 statement.setString(1, userid);
                 statement.setString(2, username);
                 statement.setString(3, password);
@@ -366,7 +378,7 @@ public class signupForm extends javax.swing.JFrame {
                 statement.setString(8, dob);
                 statement.setString(9, email);
                 statement.setString(10, address);
-                
+
                 statement.execute();
 
                 JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công");
@@ -506,8 +518,6 @@ public class signupForm extends javax.swing.JFrame {
     public void setTxtbox_fullname(String txtbox_fullname) {
         this.txtbox_fullname.setText(txtbox_fullname);
     }
-
-    
 
     public void setTxtbox_phone(String txtbox_phone) {
         this.txtbox_phone.setText(txtbox_phone);
