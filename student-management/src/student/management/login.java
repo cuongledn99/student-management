@@ -149,9 +149,14 @@ public class login extends javax.swing.JFrame {
                     new DangKyHP().setVisible(true);
                     this.setVisible(false);
                     break;
-                    
+
                 case "lec":
                     new QuanLyDiem().setVisible(true);
+                    this.setVisible(false);
+                    break;
+
+                case "pdt":
+                    new phongdaotao().setVisible(true);
                     this.setVisible(false);
                     break;
 
