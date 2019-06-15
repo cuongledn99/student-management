@@ -63,7 +63,7 @@ public class DBConnection {
     public void connect() {
         try {
             con = OraConnection.openConnection(CONST.hostname, CONST.port, CONST.dbname, CONST.username, CONST.password);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
 
@@ -72,7 +72,7 @@ public class DBConnection {
     public void disconnect() {
         try {
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
 

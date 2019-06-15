@@ -1,45 +1,47 @@
-----drop database
---BEGIN
---   FOR cur_rec IN (SELECT object_name, object_type
---                     FROM user_objects
---                    WHERE object_type IN
---                             ('TABLE',
---                              'VIEW',
---                              'PACKAGE',
---                              'PROCEDURE',
---                              'FUNCTION',
---                              'SEQUENCE',
---                              'SYNONYM',
---                              'PACKAGE BODY'
---                             ))
---   LOOP
---      BEGIN
---         IF cur_rec.object_type = 'TABLE'
---         THEN
---            EXECUTE IMMEDIATE    'DROP '
---                              || cur_rec.object_type
---                              || ' "'
---                              || cur_rec.object_name
---                              || '" CASCADE CONSTRAINTS';
---         ELSE
---            EXECUTE IMMEDIATE    'DROP '
---                              || cur_rec.object_type
---                              || ' "'
---                              || cur_rec.object_name
---                              || '"';
---         END IF;
---      EXCEPTION
---         WHEN OTHERS
---         THEN
---            DBMS_OUTPUT.put_line (   'FAILED: DROP '
---                                  || cur_rec.object_type
---                                  || ' "'
---                                  || cur_rec.object_name
---                                  || '"'
---                                 );
---      END;
---   END LOOP;
---END;
+--drop database
+
+BEGIN
+
+   FOR cur_rec IN (SELECT object_name, object_type
+                     FROM user_objects
+                    WHERE object_type IN
+                             ('TABLE',
+                              'VIEW',
+                              'PACKAGE',
+                              'PROCEDURE',
+                              'FUNCTION',
+                              'SEQUENCE',
+                              'SYNONYM',
+                              'PACKAGE BODY'
+                             ))
+   LOOP
+      BEGIN
+         IF cur_rec.object_type = 'TABLE'
+         THEN
+            EXECUTE IMMEDIATE    'DROP '
+                              || cur_rec.object_type
+                              || ' "'
+                              || cur_rec.object_name
+                              || '" CASCADE CONSTRAINTS';
+         ELSE
+            EXECUTE IMMEDIATE    'DROP '
+                              || cur_rec.object_type
+                              || ' "'
+                              || cur_rec.object_name
+                              || '"';
+         END IF;
+      EXCEPTION
+         WHEN OTHERS
+         THEN
+            DBMS_OUTPUT.put_line (   'FAILED: DROP '
+                                  || cur_rec.object_type
+                                  || ' "'
+                                  || cur_rec.object_name
+                                  || '"'
+                                 );
+      END;
+   END LOOP;
+END;
 
 --commit;
 --/
@@ -54,6 +56,12 @@ CREATE TABLE Users (
   dateOfBirth date,
   email varchar2(128),
   address varchar2(256)
+);
+COMMIT;
+/
+CREATE TABLE Role(
+  roleID varchar2(10) PRIMARY KEY,
+    roleName varchar2(30)
 );
 COMMIT;
 /
@@ -213,6 +221,9 @@ COMMIT;
 --Alter table User
 ALTER TABLE Users
      ADD CONSTRAINT check_gender_Users CHECK (gender IN ('Male','Female'));
+ALTER TABLE Users
+    ADD CONSTRAINT FK_userRole_user FOREIGN KEY (userRole)
+    REFERENCES Role (roleID);
 COMMIT;
 /
 --Alter table Student
@@ -311,7 +322,6 @@ ADD (CONSTRAINT FK_studentID_BangDiem FOREIGN KEY (studentID)
     
     CONSTRAINT FK_semester_BangDiem FOREIGN KEY (semester)
     REFERENCES Semester(SemesterID));
-COMMIT;
 CREATE SEQUENCE BangDiem_ID_SEQ
  INCREMENT BY 1
  START WITH 1
@@ -404,6 +414,7 @@ CREATE SEQUENCE Fee_ID_SEQ
 ADD CONSTRAINT FK_KHTC_id_KHTC FOREIGN KEY (KHTC_id)
     REFERENCES Users(userID);
 COMMIT;
+/
 --Alter table DiemRenLuyen
 ALTER TABLE DiemRenLuyen 
 ADD (CONSTRAINT FK_studentID_DiemRenLuyen FOREIGN KEY (studentID)
@@ -413,57 +424,7 @@ ADD (CONSTRAINT FK_studentID_DiemRenLuyen FOREIGN KEY (studentID)
     REFERENCES Semester(SemesterID));
 COMMIT;
 /
-
-
-
-
-
-ALTER SESSION set NLS_DATE_FORMAT = 'DD-MM-YYYY';
-/
-INSERT INTO Semester VALUES ('2018-2019');
-INSERT INTO Semester VALUES ('2017-2018');
-INSERT INTO Semester VALUES ('2019-2020');
-COMMIT;
-/
---insert Users Student
-insert into users values ('st01','a','1','huy cuong','Male','student','0234134','20/11/1999','email1','address1');
-COMMIT;
-/
---insert Users Lecture
-insert into users values ('lec01','b','1','huy cuong','Male','lecture','0234134','20/11/1999','email1','address1');
-COMMIT;
-/
---insert Users Phong Dao Tao
-insert into users values ('pdt01','c','1','huy cuong','Male','phongdaotao','0234134','20/11/1999','email1','address1');
-COMMIT;
---insert Users IT department 
-insert into users values ('it01','cuongledn99','cuong123','huy cuong','Male','IT','0234134','20/11/1999','email1','address1');
-COMMIT;
---insert Users CTSV
-insert into users values ('ctsv01','d','1','huy cuong','Male','ctsv','0234134','20/11/1999','email1','address1');
-COMMIT;
---insert Users KHTC
-insert into users values ('tc01','e','1','huy cuong','Male','khtc','0234134','20/11/1999','email1','address1');
-COMMIT;
---insert table Faculty
---INSERT INTO Faculty VALUES('FAC01','He Thong Thong Tin',NULL,'01/01/2010');
---INSERT INTO Faculty VALUES('FAC02','Mang May Tinh and Truyen Thong',NULL,'01/01/2010');
---INSERT INTO Faculty VALUES('FAC03','Cong Nghe Phan Mem',NULL,'01/01/2010');
---COMMIT;
---insert table Lecture
---INSERT INTO Lecture VALUES('LE001','FAC01',NULL);
---INSERT INTO Lecture VALUES('LE002','FAC01',NULL);
---INSERT INTO Lecture VALUES('LE003','FAC02',NULL);
---INSERT INTO Lecture VALUES('LE004','FAC02',NULL);
---INSERT INTO Lecture VALUES('LE005','FAC03',NULL);
---INSERT INTO Lecture VALUES('LE006','FAC03',NULL);
---COMMIT;
---insert table Class
---INSERT INTO Class VALUES('CLA01','HTCL 2018',NULL,'FAC01',0);
---INSERT INTO Class VALUES('CLA02','ATCL 2018',NULL,'FAC02',0);
---INSERT INTO Class VALUES('CLA03','PMCL 2018',NULL,'FAC03',0);
---COMMIT;
---trigger cap nhat classSizes
+--trigger cap nhat sỉ số lớp
 CREATE OR REPLACE TRIGGER increase_classSize AFTER INSERT OR UPDATE ON Student
 FOR EACH ROW
 BEGIN
@@ -482,6 +443,7 @@ BEGIN
   END IF;
 END;
 /
+--trigger cap nhat sỉ số lớp
 CREATE OR REPLACE TRIGGER decrease_classSize AFTER DELETE ON Student
 FOR EACH ROW
 BEGIN
@@ -493,128 +455,7 @@ BEGIN
   END IF;
 END;
 /
---insert table Student 
---INSERT INTO Student VALUES('SV001','CLA01');
---INSERT INTO Student VALUES('SV002','CLA02');
---INSERT INTO Student VALUES('SV003','CLA01');
---INSERT INTO Student VALUES('SV004','CLA02');
---INSERT INTO Student VALUES('SV005','CLA01');
---INSERT INTO Student VALUES('SV006','CLA02');
---INSERT INTO Student VALUES('SV007','CLA01');
---INSERT INTO Student VALUES('SV008','CLA02');
---INSERT INTO Student VALUES('SV009','CLA01');
---INSERT INTO Student VALUES('SV010','CLA02');
---INSERT INTO Student VALUES('SV011','CLA01');
---INSERT INTO Student VALUES('SV012','CLA02');
---INSERT INTO Student VALUES('SV013','CLA01');
---INSERT INTO Student VALUES('SV014','CLA02');
---COMMIT;
---insert table PhongDaoTao
---INSERT INTO PhongDaoTao VALUES('PDT01');
---COMMIT;
-
---insert table Subject;
---INSERT INTO Subject VALUES('MH001','Subject Name 1',3,'FAC01',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH002','Subject Name 2',4,'FAC02',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH003','Subject Name 3',3,'FAC03',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH004','Subject Name 4',4,'FAC01','MH001','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH005','Subject Name 5',3,'FAC02','MH002','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH006','Subject Name 6',4,'FAC03',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH007','Subject Name 7',3,'FAC01','MH004','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH008','Subject Name 8',4,'FAC02',NULL,'PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---INSERT INTO Subject VALUES('MH009','Subject Name 9',3,'FAC03','MH003','PDT01','PDT01',0.2,0.2,0,0.6,NULL,NULL);
---COMMIT;
---insert table BangDiem
---INSERT INTO BANGDIEM VALUES ('BD001','SV001','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD002','SV002','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD003','SV003','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD004','SV004','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD005','SV005','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD006','SV006','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD007','SV007','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD008','SV008','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD009','SV009','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD010','SV010','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD011','SV011','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD012','SV012','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD013','SV013','2018-2019');
---INSERT INTO BANGDIEM VALUES ('BD014','SV014','2018-2019');
---COMMIT;
-
---insert table IT_DEPARTMENT
---INSERT INTO IT_DEPARTMENT VALUES ('ITD01');
---COMMIT;
---insert table USER_MANAGEMENT
---INSERT INTO USER_MANAGEMENT VALUES('UM001','ITD01','ITD01',NULL,NULL,'SV001');
---INSERT INTO USER_MANAGEMENT VALUES('UM002','ITD01','ITD01',NULL,NULL,'SV002');
---INSERT INTO USER_MANAGEMENT VALUES('UM003','ITD01','ITD01',NULL,NULL,'SV003');
---INSERT INTO USER_MANAGEMENT VALUES('UM004','ITD01','ITD01',NULL,NULL,'SV004');
---INSERT INTO USER_MANAGEMENT VALUES('UM005','ITD01','ITD01',NULL,NULL,'SV005');
---INSERT INTO USER_MANAGEMENT VALUES('UM006','ITD01','ITD01',NULL,NULL,'SV006');
---INSERT INTO USER_MANAGEMENT VALUES('UM007','ITD01','ITD01',NULL,NULL,'SV007');
---INSERT INTO USER_MANAGEMENT VALUES('UM008','ITD01','ITD01',NULL,NULL,'SV008');
---INSERT INTO USER_MANAGEMENT VALUES('UM009','ITD01','ITD01',NULL,NULL,'SV009');
---INSERT INTO USER_MANAGEMENT VALUES('UM010','ITD01','ITD01',NULL,NULL,'SV010');
---INSERT INTO USER_MANAGEMENT VALUES('UM011','ITD01','ITD01',NULL,NULL,'SV011');
---INSERT INTO USER_MANAGEMENT VALUES('UM012','ITD01','ITD01',NULL,NULL,'SV012');
---INSERT INTO USER_MANAGEMENT VALUES('UM013','ITD01','ITD01',NULL,NULL,'SV013');
---INSERT INTO USER_MANAGEMENT VALUES('UM014','ITD01','ITD01',NULL,NULL,'SV014');
---COMMIT;
---insert table CTSV
---INSERT INTO CTSV VALUES('CTS01');
---COMMIT;
---insert table DIEMMONHOC
---INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH001');
---INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH002');
---INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH003');
---INSERT INTO DIEMMONHOC VALUES(DiemMonHoc_ID_SEQ.NEXTVAL,0,0,0,0,0,'LE001',NULL,'BD001','MH004');
---COMMIT;
---insert table KHTC
---INSERT INTO KHTC VALUES ('KHT01');
---COMMIT;
-----�nert table FEE
---INSERT INTO FEE VALUES ('HP001',14000000,'2018-2019','SV001',1,'KHT01');
---INSERT INTO FEE VALUES ('HP002',14000000,'2018-2019','SV002',0,NULL);
---INSERT INTO FEE VALUES ('HP003',14000000,'2018-2019','SV003',1,'KHT01');
---INSERT INTO FEE VALUES ('HP004',14000000,'2018-2019','SV004',0,NULL);
---INSERT INTO FEE VALUES ('HP005',14000000,'2018-2019','SV005',1,'KHT01');
---INSERT INTO FEE VALUES ('HP006',14000000,'2018-2019','SV006',0,NULL);
---INSERT INTO FEE VALUES ('HP007',14000000,'2018-2019','SV007',1,'KHT01');
---INSERT INTO FEE VALUES ('HP008',14000000,'2018-2019','SV008',0,NULL);
---INSERT INTO FEE VALUES ('HP009',14000000,'2018-2019','SV009',1,'KHT01');
---INSERT INTO FEE VALUES ('HP010',14000000,'2018-2019','SV010',0,NULL);
---INSERT INTO FEE VALUES ('HP011',14000000,'2018-2019','SV011',1,'KHT01');
---INSERT INTO FEE VALUES ('HP012',14000000,'2018-2019','SV012',0,NULL);
---INSERT INTO FEE VALUES ('HP013',14000000,'2018-2019','SV013',1,'KHT01');
---INSERT INTO FEE VALUES ('HP014',14000000,'2018-2019','SV014',0,NULL);
---INSERT INTO FEE VALUES ('HP015',7000000,'2019-2020','SV001',0,NULL);
---COMMIT;
---insert table DiemRenLuyen
---INSERT INTO DiemRenLuyen VALUES(1,'SV001',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(2,'SV002',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(3,'SV003',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(4,'SV004',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(5,'SV005',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(6,'SV006',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(7,'SV007',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(8,'SV008',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(9,'SV009',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(10,'SV010',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(11,'SV011',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(12,'SV012',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(13,'SV013',80,'2018-2019');
---INSERT INTO DiemRenLuyen VALUES(14,'SV014',80,'2018-2019');
---COMMIT;
---insert Offering
---INSERT INTO OFFERING VALUES('MH001.201','MH001','2018-2019',NULL,50);
---INSERT INTO OFFERING VALUES('MH001.101','MH001','2018-2019',NULL,100);
---INSERT INTO OFFERING VALUES('MH002.201','MH002','2018-2019',NULL,50);
---INSERT INTO OFFERING VALUES('MH004.201','MH004','2018-2019',NULL,50);
---INSERT INTO OFFERING VALUES('MH005.201','MH005','2018-2019',NULL,50);
---INSERT INTO OFFERING VALUES('MH006.201','MH006','2018-2019',NULL,50);
---COMMIT;
---Trgier Cap nhat diem mon hoc
-/
+--Trgier Cập nhật điểm môn học
 CREATE OR REPLACE TRIGGER update_score_DiemMonHoc BEFORE UPDATE ON DIEMMONHOC
 FOR EACH ROW
 DECLARE
@@ -646,16 +487,61 @@ BEGIN
     :NEW.score := :NEW.diemQT * v_HeSoQT + :NEW.diemGK * v_HeSoGK + :NEW.diemTH * v_HeSoTH + :NEW.diemCK * v_HeSoCK;
 END;
 /
-
-
-
+--trigger kiem tra he so khi them moi mon hoc.
+CREATE OR REPLACE TRIGGER Check_heso_subject BEFORE INSERT OR UPDATE ON subject
+FOR EACH ROW
+DECLARE
+    v_sumHS number;
+BEGIN
+    v_sumHS := :NEW.HESODIEMQT + :NEW.HESODIEMGK + :NEW.HESODIEMTH + :NEW.HESODIEMCK;
+    IF(v_sumHS != 1)
+    THEN    
+        RAISE_APPLICATION_ERROR(-20005, 'He so diem cua mon hoc khong dung');
+    END IF;
+END;
+/
+ALTER SESSION set NLS_DATE_FORMAT = 'DD-MM-YYYY';
+/
+--insert Role
+insert into role values('it','it_department');
+insert into role values('st','student');
+insert into role values('ctsv','ctsv');
+insert into role values('khtc','khtc');
+insert into role values('pdt','phongdaotao');
+insert into role values('lec','lecture');
+COMMIT;
+/
+--insert Users Student
+INSERT INTO Users VALUES('SV001','Student User Name 1',NULL, 'Student Name 1', 'Male', 'st', NULL, '31/12/1999', 'Student Email 1', 'Student address 1');
+COMMIT;
+/
+--insert Users Lecture
+INSERT INTO Users VALUES('LE001','Lecture User Name 1',NULL, 'Lecture Name 1', 'Male', 'lec', NULL, '01/01/1985', 'Lecture Email 1', 'Lecture address 1');
+COMMIT;
+/
+--insert Users Phong Dao Tao
+INSERT INTO Users VALUES('PDT01','PDT User Name 1',NULL, 'PDT Name 1', 'Male', 'pdt', NULL, '01/01/1985', 'PDT Email 1', 'PDT address 1');
+COMMIT;
+/
+--insert Users IT department 
+INSERT INTO Users VALUES('ITD01','IT department User Name 1',NULL, 'IT department Name 1', 'Male', 'it', NULL, '01/01/1985', 'IT department Email 1', 'IT department address 1');
+COMMIT;
+/
+--insert Users CTSV
+INSERT INTO Users VALUES('CTS01','CTSV User Name 1',NULL, 'CTSV Name 1', 'Male', 'ctsv', NULL, '01/01/1985', 'CTSV Email 1', 'CTSV address 1');
+COMMIT;
+/
+--insert Users KHTC
+INSERT INTO Users VALUES('KHT01','KHTC User Name 1',NULL, 'KHTC Name 1', 'Male', 'khtc', NULL, '01/01/1985', 'KHTC Email 1', 'KHTC address 1');
+COMMIT;
+/
 -- function generate BangDiemID
 CREATE OR REPLACE FUNCTION getBangDiemID RETURN varchar2 IS
 BEGIN
     RETURN 'BD' || BangDiem_ID_SEQ.nextval;
 END;
 /
---th? t?c th�m v�o b?ng SUBJECT_REGISTRATION l�m ??ng k� h?c ph?n.
+--thủ tục thêm vào bảng SUBJECT_REGISTRATION làm đăng ký học phần.
 CREATE OR REPLACE PROCEDURE INSERT_SUBJECT_REGISTRATION (in_studentID STUDENT.STUDENTID%TYPE,in_PDT_ID PHONGDAOTAO.PDT_ID%TYPE, 
 in_offeringID OFFERING.OFFERINGID%TYPE, in_semester OFFERING.SEMESTER%TYPE)
 AS
@@ -666,11 +552,15 @@ AS
     cur_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
     v_status number := 0;
     v_status2 number := 0;
+    v_status3 number := 0;	
     v_idBangDiem BANGDIEM.ID_BANGDIEM%TYPE;
     v_lectureID LECTURE.LECTUREID%TYPE;
     v_date varchar2(255);
     v_registered number;
     v_slot number;
+    v_hocphi number;
+    v_tinchi number;
+    v_studentID STUDENT.STUDENTID%TYPE;
     CURSOR cur IS SELECT ID_BANGDIEM
                   FROM BANGDIEM
                   WHERE BANGDIEM.STUDENTID = in_studentID;
@@ -749,6 +639,33 @@ BEGIN
             v_idBangDiem := GETBANGDIEMID();
             INSERT INTO BANGDIEM VALUES (v_idBangDiem,in_studentID,in_semester);
        END IF;
+       
+       SELECT SUBJECT.NUMBEROFCREDITS
+        INTO v_tinchi
+        FROM SUBJECT
+        WHERE SUBJECT.SUBJECTID = v_SubjectID;
+        
+        v_hocphi := v_tinchi * 500000;
+        
+        BEGIN
+            SELECT FEE.STUDENTID
+            INTO v_studentID
+            FROM FEE
+            WHERE FEE.STUDENTID = in_studentID AND FEE.SEMESTER = in_semester;
+            EXCEPTION 
+            WHEN NO_data_found
+            THEN
+                v_status3 := 1;
+        END;
+        IF(v_status3 = 1)
+        THEN
+            INSERT INTO FEE VALUES (FEE_ID_SEQ.NEXTVAL,v_hocphi,in_semester,in_studentID,0,NULL);
+        ELSE 
+            UPDATE fee
+            set MONEY = MONEY + v_hocphi
+            WHERE fee.STUDENTID = in_studentID AND fee.SEMESTER = in_semester;
+        END IF;
+       
        INSERT INTO SUBJECT_REGISTRATION VALUES (registrationID_SEQ.NEXTVAL,in_studentID,in_PDT_ID,in_offeringID,in_semester);
        SELECT TO_CHAR(SYSDATE, 'DD-MM-YYYY') INTO v_date FROM dual;
        dbms_output.put_line(v_date);
@@ -756,7 +673,52 @@ BEGIN
        COMMIT;
 END;
 /
--- th? t?c c?p nh?t ?i?m cho sinh vi�n.
+-- thủ tục xóa đăng ký học phần.
+CREATE OR REPLACE PROCEDURE DELETE_SUBJECT_REGISTRATION (in_studentID STUDENT.STUDENTID%TYPE,in_offeringID OFFERING.OFFERINGID%TYPE,in_semester OFFERING.SEMESTER%TYPE)
+AS
+    v_subjectID SUBJECT.SUBJECTID%TYPE;
+    v_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
+    v_tinchi number;
+    v_hocphi number;
+    v_money number;
+BEGIN
+    SELECT bd.ID_BANGDIEM
+    INTO v_BangDiemID
+    FROM BANGDIEM bd
+    WHERE bd.STUDENTID = in_studentID AND bd.SEMESTER = in_semester;
+    
+    SELECT SUBJECTID
+    INTO v_subjectID
+    FROM OFFERING
+    WHERE OFFERING.OFFERINGID = in_offeringID;
+    
+    SELECT SUBJECT.NUMBEROFCREDITS
+    INTO v_tinchi
+    FROM SUBJECT
+    WHERE SUBJECT.SUBJECTID = v_subjectID;
+    
+    v_hocphi := v_tinchi * 500000;
+    
+    UPDATE fee
+    set MONEY = MONEY - v_hocphi
+    WHERE fee.STUDENTID = in_studentID AND fee.SEMESTER = in_semester;
+    
+    SELECT FEE.money
+    INTO v_money
+    FROM FEE
+    WHERE FEE.STUDENTID = in_studentID AND FEE.SEMESTER = in_semester;
+    
+    IF(v_money = 0)
+    THEN
+        DELETE FROM fee WHERE fee.STUDENTID = in_studentID AND fee.SEMESTER = in_semester;
+    END IF;
+    
+    DELETE FROM SUBJECT_REGISTRATION sr WHERE sr.REGISTEREDBY = in_studentID AND sr.OFFERINGID = in_offeringID AND sr.SEMESTER = in_semester;
+    DELETE FROM DIEMMONHOC dmh WHERE dmh.ID_BANGDIEM = v_BangDiemID AND dmh.ID_MONHOC = v_subjectID;
+    COMMIT;
+END;
+/
+-- thủ tục cập nhật điểm cho sinh viên.
 CREATE OR REPLACE PROCEDURE Update_diem (in_studentID STUDENT.STUDENTID%TYPE,
                                          in_semester BANGDIEM.SEMESTER%TYPE,
                                          in_offeringID OFFERING.OFFERINGID%TYPE,
@@ -787,28 +749,7 @@ BEGIN
     COMMIT;
 END;
 /
--- th? t?c x�a ??ng k� h?c ph?n.
-CREATE OR REPLACE PROCEDURE DELETE_SUBJECT_REGISTRATION (in_studentID STUDENT.STUDENTID%TYPE,in_offeringID OFFERING.OFFERINGID%TYPE,in_semester OFFERING.SEMESTER%TYPE)
-AS
-    v_subjectID SUBJECT.SUBJECTID%TYPE;
-    v_BangDiemID BANGDIEM.ID_BANGDIEM%TYPE;
-BEGIN
-    SELECT bd.ID_BANGDIEM
-    INTO v_BangDiemID
-    FROM BANGDIEM bd
-    WHERE bd.STUDENTID = in_studentID AND bd.SEMESTER = in_semester;
-    
-    SELECT SUBJECTID
-    INTO v_subjectID
-    FROM OFFERING
-    WHERE OFFERING.OFFERINGID = in_offeringID;
-    
-    DELETE FROM SUBJECT_REGISTRATION sr WHERE sr.REGISTEREDBY = in_studentID AND sr.OFFERINGID = in_offeringID AND sr.SEMESTER = in_semester;
-    DELETE FROM DIEMMONHOC dmh WHERE dmh.ID_BANGDIEM = v_BangDiemID AND dmh.ID_MONHOC = v_subjectID;
-    COMMIT;
-END;
-/
-
+-- thủ tục in ra số học phí
 CREATE OR REPLACE PROCEDURE print_Fee (in_StudentID IN STUDENT.STUDENTID%TYPE)
 AS
     cur_FeeID FEE.FEEID%TYPE;
@@ -838,7 +779,7 @@ BEGIN
     END LOOP;
 END;
 /
-
+--thủ tục in ra điểm rèn luyện
 CREATE OR REPLACE PROCEDURE print_drl (in_studentID IN DIEMRENLUYEN.STUDENTID%TYPE, in_semester IN DIEMRENLUYEN.SEMESTER%TYPE)
 AS
     v_drl DIEMRENLUYEN.SCORE%TYPE;
@@ -862,167 +803,62 @@ BEGIN
         EXIT WHEN v_now + (in_time * (1/86400)) <= SYSDATE;
     END LOOP;
 END;
-
-create table role
-(
-  roleid varchar2(10) primary key,
-  rolename varchar2(20)
-)
-insert into role values('it','it_department');
-insert into role values('st','student');
-insert into role values('ctsv','ctsv');
-insert into role values('khtc','khtc');
-insert into role values('pdt','phongdaotao');
-insert into role values('lec','lecture');
-select*from users
-update users set userrole='st' where userid='st01'
-update users set userrole='lec' where userid='lec01'
-
-commit;
-
-
-create or REPLACE procedure addUser(userid users.userid%type, 
-username users.username%type,
-pass users.userpassword%type,
-fullname users.fullname%type,
-gender users.gender%type,
-role_in role.rolename%type, --role name
-phone users.phonenumber%type,
-dob users.dateofbirth%type,
-email users.email%type,
-address users.address%type
-
-)
+/
+--thủ tục lấy ra thông tin của user
+create or replace procedure getUserInfo(query_userID users.userID%type)
 as
-  roleid_temp role.roleid%type;
-BEGIN
-  --insert table users
-  select roleid into roleid_temp from role where rolename=role_in;
-  insert into users values(userid,username,pass,fullname,gender,roleid_temp,phone,dob,email,address);
-  
-  --insert in relevant tables
-  if(role_in='it_department') then
-    insert into it_department values(userid);
-  elsif (role_in='student') then
-    insert into student values(userid,null);
-  elsif (role_in='ctsv') then
-    insert into ctsv values(userid);
-  elsif (role_in='khtc') then
-    insert into khtc values(userid);
-  elsif (role_in='phongdaotao') then
-    insert into phongdaotao values(userid);
-  elsif (role_in='lecture') then
-    insert into lecture values(userid,null,null);
-  end if;
-end;
-
-create or replace procedure deleteUser(username_in users.username%type)
-as
-  roleid_temp users.userrole%type;
-  rolename_temp role.rolename%type;
-  userid_temp users.userid%type;
+  user_role users.userrole%type;
+  temp_classname CLASS.CLASSNAME%type;
+  temp_facultyname faculty.facultyname%type;
+  temp_academicrank lecture.academicrank%type;
+  temp_fullname users.fullname%type;
+  temp_gender users.gender%type;
+  temp_userrole users.userrole%type;
+  temp_phone users.phonenumber%type;
+  temp_dob users.dateofbirth%type;
+  temp_email users.email%type;
+  temp_address users.address%type;
+  temp_classid class.classid%type;
+  temp_facultyid faculty.facultyid%type;
 begin
-  --delete in relevant table first
-  select userrole,userid into roleid_temp,userid_temp from users where username=username_in;
-  select rolename into rolename_temp from role where roleid=roleid_temp;
-  
-  if(rolename_temp='it_department') then
-    delete from it_department where itdep_id= userid_temp;
-    
-  elsif (rolename_temp='student') then
-    delete from student where studentid= userid_temp; 
-    
-  elsif (rolename_temp='ctsv') then
-    delete from ctsv where id_ctsv= userid_temp; 
-    
-  elsif (rolename_temp='khtc') then
-    delete from khtc where khtc_id= userid_temp; 
-    
-  elsif (rolename_temp='phongdaotao') then
-    delete from phongdaotao where pdt_id= userid_temp; 
-    
-  elsif (rolename_temp='lecture') then
-    delete from lecture where lectureid= userid_temp; 
-    
+  select userrole into user_role from users where userID=query_userID;
+  select fullname,gender,userrole,PHONENUMBER,DATEOFBIRTH,email,address
+        into temp_fullname,temp_gender,temp_userrole,temp_phone,temp_dob,temp_email,temp_address
+        from users
+        where userid=query_userID;
+  if(user_role='st') then
+    begin
+      select classid into temp_classid from student where STUDENTID=query_userID;
+      if(temp_classid is not null) then
+        select fullname,gender,userrole,PHONENUMBER,DATEOFBIRTH,email,address,classname,facultyname
+        into temp_fullname,temp_gender,temp_userrole,temp_phone,temp_dob,temp_email,temp_address,temp_classname,temp_facultyname
+        from users,student,class,FACULTY
+        where users.userId=student.STUDENTID and student.CLASSID=class.CLASSID and class.FACULTYID=FACULTY.FACULTYID;
+      end if;
+    end;
+  elsif(user_role='lec') then
+    begin
+      select facultyid into temp_facultyid from lecture where lectureid=query_userID;
+      if(temp_facultyid is not null) then
+        select fullname,gender,userrole,users.PHONENUMBER,users.DATEOFBIRTH,email,address,facultyname,academicrank
+        into temp_fullname,temp_gender,temp_userrole,temp_phone,temp_dob,temp_email,temp_address,temp_facultyname,temp_academicrank
+        from users,lecture,faculty 
+        where users.userid=lecture.lectureid and lecture.facultyid=faculty.facultyid;
+      end if;
+    end;
   end if;
   
-  --delete in table users
-  delete from users where username=username_in;
+  DBMS_OUTPUT.PUT_LINE('full name: ' ||temp_fullname);
+  DBMS_OUTPUT.PUT_LINE('gender: ' ||temp_gender);
+  DBMS_OUTPUT.PUT_LINE('role: ' ||temp_userrole);
+  DBMS_OUTPUT.PUT_LINE('phone number: ' ||temp_phone);
+  DBMS_OUTPUT.PUT_LINE('date of birth: ' ||temp_dob);
+  DBMS_OUTPUT.PUT_LINE('email: ' ||temp_email);
+  DBMS_OUTPUT.PUT_LINE('address: ' ||temp_address);
+  if(user_role='st') then
+    DBMS_OUTPUT.PUT_LINE('class: ' ||temp_classname);
+  elsif(user_role='lec') then
+    DBMS_OUTPUT.PUT_LINE('faculty: ' ||temp_facultyname);
+  end if;
 end;
-
-
-create or replace procedure addFaculty(
-facultyid_in faculty.facultyid%type,
-facultyname_in faculty.facultyname%type,
-deanid_in faculty.dean%type
-)
-as
-  currentdate date;
-begin
-  SELECT sysdate into currentdate FROM dual;
-  
-  insert into faculty values(facultyid_in,facultyname_in,deanid_in,currentdate);
-end;
-
-create or replace procedure addSubject
-(
-subjectid subject.subjectid%type,
-subjectName subject.subjectname%type,
-credits subject.numberofcredits%type,
-facultyid subject.facultyid%type,
-preSubject subject.previoussubject%type,
-createdBy subject.createdBy%type,
-updatedBy subject.updatedBy%type,
-qt subject.hesodiemqt%type,
-gk number,
-th subject.hesodiemth%type,
-ck subject.hesodiemck%type
-)
-
-as
-  createdDate_temp date;
-  updatedDate_temp date;
-begin
-  select sysdate into createdDate_temp from dual;
-  select sysdate into updatedDate_temp from dual;
-  insert into subject values
-  (subjectid,
-  subjectName,
-  credits,
-  facultyid,
-  preSubject,
-  createdBy,
-  updatedBy,
-  qt,
-  gk,
-  th,
-  ck,
-  createdDate_temp,
-  updatedDate_temp
-);
-end;
-
-create or replace procedure createOffering(
-  subjectID offering.subjectid%type, 
-  semester offering.semester%type,
-  lecture offering.lectureid%type,
-  slot offering.slot%type
-)
-as
-  offeringid offering.offeringid%type;
-begin 
-
-  select 'off'||to_char(seq_Offering.nextval,'FM00000')  into offeringid from dual;
-
-  insert into offering values(offeringid,subjectID,semester,lecture,slot);
-
-end;
-
-begin
-CREATEOFFERING('sub01','2018-2019','lec01',40);
-end;
-
-begin
-DELETE_SUBJECT_REGISTRATION('st02','off00026','2017-2018');
-end;
-
+/
