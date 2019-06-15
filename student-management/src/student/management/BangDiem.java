@@ -300,7 +300,7 @@ public class BangDiem extends javax.swing.JFrame {
     public void prepareGUI_cbSemester() {
         model_cbSemester = (DefaultComboBoxModel<String>) this.cbSemester.getModel();
         model_cbSemester.removeAllElements();
-        String userID = new ConnectionOracle().getUserID();
+        String userID = CONST.currentUserid;
         try {
 
             connection.connect();
@@ -319,7 +319,7 @@ public class BangDiem extends javax.swing.JFrame {
     public void prepareGUI_tbScore(String semester) {
         model_tbScore = (DefaultTableModel) this.tbScore.getModel();
         model_tbScore.setRowCount(0);
-        String userID = new ConnectionOracle().getUserID();
+        String userID = CONST.currentUserid;
         int stt = 1;
         double averageScore = 0;
         int sumNumberOfCredits = 0;

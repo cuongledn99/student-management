@@ -435,7 +435,7 @@ public class QuanLyDiem extends javax.swing.JFrame {
         int rowSelected = tbSubject.getSelectedRow();
         v_OfferingID = (String) tbSubject.getModel().getValueAt(rowSelected, 1);
         String semester = (String) cbSemester.getSelectedItem();
-        String lectureID = new ConnectionOracle().getLectureID();
+        String lectureID = CONST.currentUserid;
         //System.out.println(v_OfferingID+semester+lectureID);
         this.loadData_tbStudent(v_OfferingID, semester, lectureID);
         jTabbedPane1.setSelectedIndex(1);
@@ -606,7 +606,7 @@ public class QuanLyDiem extends javax.swing.JFrame {
     public void prepareUI_tbSemester() {
         model_cbSemester = (DefaultComboBoxModel<String>) this.cbSemester.getModel();
         model_cbSemester.removeAllElements();
-        String lectureID = new ConnectionOracle().getLectureID();
+        String lectureID = CONST.currentUserid;
         try {
             connection.connect();
             PreparedStatement ps = DBConnection.con.prepareCall("SELECT semester FROM OFFERING o WHERE o.LECTUREID = ? GROUP BY semester");
